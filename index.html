@@ -9,6 +9,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
   <link rel="icon" type="image/x-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🎶%3C/text%3E%3C/svg%3E">
+  
+  <!-- Tesseract.js para OCR -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  
   <style>
   :root {
     --font-primary: 'Inter', sans-serif;
@@ -20,6 +24,7 @@
     --success-color: #10b981;
     --error-color: #ef4444;
     --warning-color: #f59e0b;
+    --info-color: #0ea5e9;
 
     --bg-light: #f9fafb;
     --surface-light: #ffffff;
@@ -91,7 +96,9 @@
 
   h2 { font-size: 1.5em; font-weight: 600; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; margin: 0 0 20px 0; color: var(--text-light); }
   .button-group { display: flex; flex-direction: column; gap: 10px; margin-top: auto; padding-top: 20px; }
+  
   .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .button-row-input { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; } 
 
   button {
     padding: 12px 18px; font-size: 0.95em; font-weight: 600; font-family: var(--font-primary);
@@ -101,13 +108,14 @@
   }
   button:hover { filter: brightness(1.1); }
   button:active { transform: scale(0.97); }
-  button:disabled { background-image: none !important; background-color: #9ca3af !important; cursor: not-allowed; transform: none; filter: none; }
+  button:disabled { background-image: none !important; background-color: #9ca3af !important; cursor: not-allowed; transform: none; filter: none; opacity: 0.8; }
 
   #convert-button { background-image: linear-gradient(to right, var(--gradient-start) 0%, var(--primary-color) 51%, var(--gradient-start) 100%); }
   #copy-button { background-color: var(--success-color); }
   #clear-button { background-color: var(--error-color); }
   #undo-button { background-color: var(--warning-color); color: #1f2937; }
   #load-file-button { background-color: #4b5563; }
+  #ocr-button { background-color: var(--info-color); } 
   #export-txt-button { background-color: #4b5563; }
   .transpose-button { background-color: var(--primary-color); }
   #settings-button { background-color: #374151; }
@@ -125,7 +133,7 @@
   
   .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; }
   .modal-content { background-color: var(--surface-light); border: 1px solid var(--border-light); color: var(--text-light); margin: auto; padding: 30px; border-radius: var(--border-radius); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); width: 90%; max-width: 500px; position: relative; }
-  .close-button { color: var(--text-muted-light); position: absolute; top: 15px; right: 25px; font-size: 30px; font-weight: bold; cursor: pointer; }
+  .close-button { color: var(--text-muted-light); position: absolute; top: 15px; right: 25px; font-weight: bold; cursor: pointer; }
   .modal-content h3 { color: var(--primary-color); border-bottom-color: var(--border-light); margin-top: 0; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; margin-bottom: 20px; font-size: 1.6em;}
   .modal-section { margin-bottom: 25px; }
   .modal-control-group { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 15px; background-color: var(--bg-light); padding: 15px; border-radius: 8px; }
@@ -171,8 +179,9 @@
       <textarea id="input-textbox" placeholder="Pega aquí la canción o arrastra un archivo .txt..."></textarea>
       <div class="button-group">
         <button id="convert-button" title="Atajo: Ctrl + Enter"><i class="fas fa-magic-wand-sparkles"></i><span data-i18n="convertButton">Convertir</span></button>
-        <div class="button-row">
+        <div class="button-row-input">
             <button id="load-file-button" title="Atajo: Ctrl + L"><i class="fas fa-folder-open"></i><span data-i18n="loadFileButton">Cargar</span></button>
+            <button id="ocr-button" title="Extraer texto de imagen"><i class="fas fa-camera"></i><span data-i18n="ocrButton">Imagen</span></button>
             <button id="undo-button" title="Deshacer (Ctrl + Z)" disabled><i class="fas fa-undo"></i><span data-i18n="undoButton">Deshacer</span></button>
         </div>
         <button id="clear-button" title="Atajo: Ctrl + E"><i class="fas fa-eraser"></i><span data-i18n="clearButton">Limpiar</span></button>
@@ -233,6 +242,7 @@
 © 2025 LUFTMANDMAURICIO</p>
 
   <input type="file" id="file-input" accept=".txt, .pro, .chopro" style="display: none;" />
+  <input type="file" id="image-input" accept="image/*" style="display: none;" />
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -242,6 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inputTextbox: getEl('input-textbox'), outputTextbox: getEl('output-textbox'),
         convertButton: getEl('convert-button'), copyButton: getEl('copy-button'),
         loadFileButton: getEl('load-file-button'), undoButton: getEl('undo-button'),
+        ocrButton: getEl('ocr-button'), imageInput: getEl('image-input'),
         clearButton: getEl('clear-button'), fileInput: getEl('file-input'),
         exportTxtButton: getEl('export-txt-button'), statusMessage: getEl('status-message'),
         autoConvertToggle: getEl('auto-convert-toggle'),
@@ -266,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
         es: {
             appTitle: "SongChord Weaver Pro", appTagline: "Transforma tus letras con acordes para WorshipTools.",
             autoConvertLabel: "Auto-Convertir", settingsButton: "Ajustes", inputPanelTitle: "Entrada",
-            convertButton: "Convertir", loadFileButton: "Cargar", undoButton: "Deshacer", clearButton: "Limpiar",
+            convertButton: "Convertir", loadFileButton: "Cargar", ocrButton: "Imagen", undoButton: "Deshacer", clearButton: "Limpiar",
             outputPanelTitle: "Salida para WorshipTools", copyButton: "Copiar",
             transposeDownButton: " Tono -", transposeUpButton: " Tono +", exportTxtButton: "Exportar",
             previewTitle: "Vista Previa", settingsTitle: "Ajustes", languageLabel: "Idioma",
@@ -279,12 +290,15 @@ document.addEventListener('DOMContentLoaded', () => {
             msgExportSuccess: "Exportado con éxito.", msgUndoSuccess: "Acción deshecha.",
             msgUndoDisabled: "No hay más acciones para deshacer.", msgNothingToTranspose: "Nada para transponer.",
             msgTransposed: (s) => `Transportado ${s > 0 ? '+' : ''}${s} semitonos.`,
-            msgSettingsSaved: "Ajustes guardados.", msgRegexReset: "Expresión restablecida."
+            msgSettingsSaved: "Ajustes guardados.", msgRegexReset: "Expresión restablecida.",
+            msgOcrProcessing: "Analizando coordenadas X/Y de la imagen...",
+            msgOcrSuccess: "¡Conversión geométrica exitosa!",
+            msgOcrError: "Error al procesar la imagen con OCR."
         },
         en: {
             appTitle: "SongChord Weaver Pro", appTagline: "Transform your lyrics with chords for WorshipTools.",
             autoConvertLabel: "Auto-Convert", settingsButton: "Settings", inputPanelTitle: "Input",
-            convertButton: "Convert", loadFileButton: "Load", undoButton: "Undo", clearButton: "Clear",
+            convertButton: "Convert", loadFileButton: "Load", ocrButton: "Image", undoButton: "Undo", clearButton: "Clear",
             outputPanelTitle: "WorshipTools Output", copyButton: "Copy",
             transposeDownButton: " Tone -", transposeUpButton: " Tone +", exportTxtButton: "Export",
             previewTitle: "Preview", settingsTitle: "Settings", languageLabel: "Language",
@@ -297,36 +311,33 @@ document.addEventListener('DOMContentLoaded', () => {
             msgExportSuccess: "Exported successfully.", msgUndoSuccess: "Action undone.",
             msgUndoDisabled: "No more actions to undo.", msgNothingToTranspose: "Nothing to transpose.",
             msgTransposed: (s) => `Transposed ${s > 0 ? '+' : ''}${s} semitones.`,
-            msgSettingsSaved: "Settings saved.", msgRegexReset: "Expression reset."
+            msgSettingsSaved: "Settings saved.", msgRegexReset: "Expression reset.",
+            msgOcrProcessing: "Analyzing image X/Y coordinates...",
+            msgOcrSuccess: "Geometric conversion successful!",
+            msgOcrError: "Error processing the image with OCR."
         }
     };
     
-    // --- CORE LOGIC ---
+    // --- LÓGICA DE TEXTO TRADICIONAL (PASTE/TXT) ---
     const getChordRegex = () => new RegExp(ACCORD_REGEX_STRING_GLOBAL, 'g');
     const extractChordsWithIndex = (line) => [...line.matchAll(getChordRegex())].map(m => ({ chord: m[0], index: m.index }));
 
+    const isMarkerLine = (line) => /^(intro|solo|interludio|puente|coro|verso|verse|bridge)\b/i.test(line.trim());
+
     const isPureChordLine = (line) => {
         if (!line.trim()) return false;
-        const chords = extractChordsWithIndex(line);
+        let testLine = line.replace(/^(intro|solo|interludio|puente|coro|verso|verse|bridge)\s*[:\-]?\s*/i, '');
+        const chords = extractChordsWithIndex(testLine);
         if (chords.length === 0) return false;
-        let tempLine = line;
+        
         for (let i = chords.length - 1; i >= 0; i--) {
-            tempLine = tempLine.slice(0, chords[i].index) + ' '.repeat(chords[i].chord.length) + tempLine.slice(chords[i].index + chords[i].chord.length);
+            testLine = testLine.slice(0, chords[i].index) + ' '.repeat(chords[i].chord.length) + testLine.slice(chords[i].index + chords[i].chord.length);
         }
-        return tempLine.trim().replace(/-/g, '').length === 0;
+        
+        const leftovers = testLine.replace(/[\s|:\-\/()[\]{}]/g, '').replace(/^[xX\d]+$/g, '');
+        return leftovers.length === 0;
     };
 
-    const mergeLines = (chordLine, lyricLine) => {
-        const chords = extractChordsWithIndex(chordLine);
-        let mergedLine = lyricLine;
-        for (let i = chords.length - 1; i >= 0; i--) {
-            const { chord, index } = chords[i];
-            while (mergedLine.length < index) { mergedLine += ' '; }
-            mergedLine = mergedLine.slice(0, index) + `[${chord.trim()}]` + mergedLine.slice(index);
-        }
-        return mergedLine;
-    };
-    
     const bracketUnbracketedChords = (line) => {
         const chords = extractChordsWithIndex(line);
         let processedLine = line;
@@ -340,8 +351,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return processedLine;
     };
 
+    const mergeLines = (chordLine, lyricLine) => {
+        const chords = extractChordsWithIndex(chordLine);
+        let mergedLine = lyricLine;
+        
+        for (let i = chords.length - 1; i >= 0; i--) {
+            const { chord, index } = chords[i];
+            let insertIndex = index;
+            
+            // IMÁN PARA TEXTO MANUAL:
+            if (insertIndex > 0 && insertIndex < mergedLine.length && mergedLine[insertIndex] !== ' ') {
+                let wordStart = insertIndex;
+                while (wordStart > 0 && mergedLine[wordStart - 1] !== ' ') {
+                    wordStart--;
+                }
+                insertIndex = wordStart;
+            }
+            
+            while (mergedLine.length < insertIndex) { mergedLine += ' '; }
+            mergedLine = mergedLine.slice(0, insertIndex) + `[${chord.trim()}]` + mergedLine.slice(insertIndex);
+        }
+        return mergedLine;
+    };
+
     const convertFromChordPro = (text) => {
-        // Converts {c:G} and {chord:G} to [G]
         return text.replace(/\{c:([^}]+)\}|\{chord:([^}]+)\}/g, (_, p1, p2) => `[${(p1 || p2).trim()}]`);
     };
 
@@ -349,14 +382,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const preprocessedText = convertFromChordPro(text);
         const lines = preprocessedText.replace(/\r\n/g, '\n').split('\n');
         const output = [];
+        
         for (let i = 0; i < lines.length; i++) {
             const currentLine = lines[i];
             const nextLine = (i + 1 < lines.length) ? lines[i + 1] : null;
-            if (isPureChordLine(currentLine) && nextLine !== null && nextLine.trim() !== "" && !isPureChordLine(nextLine)) {
-                output.push(mergeLines(currentLine, nextLine));
-                i++;
+            
+            if (isPureChordLine(currentLine)) {
+                if (isMarkerLine(currentLine)) {
+                    output.push(bracketUnbracketedChords(currentLine));
+                } else if (nextLine !== null && nextLine.trim() !== "" && !isPureChordLine(nextLine) && !isMarkerLine(nextLine)) {
+                    output.push(mergeLines(currentLine, nextLine));
+                    i++; 
+                } else {
+                    output.push(bracketUnbracketedChords(currentLine));
+                }
             } else {
-                output.push(bracketUnbracketedChords(currentLine));
+                output.push(currentLine);
             }
         }
         return output.join('\n');
@@ -391,6 +432,212 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('msgTransposed', 'info', steps);
     };
 
+    // --- NUEVA LÓGICA OCR (GEOMETRÍA Y CORDENADAS X/Y) ---
+
+    // 1. Escala y limpia la imagen en alto contraste
+    const preprocessImage = (file) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                const scale = 3; 
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width * scale;
+                canvas.height = img.height * scale;
+                const ctx = canvas.getContext('2d');
+                
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                let totalBrightness = 0;
+                for (let i = 0; i < data.length; i += 4) {
+                    totalBrightness += (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
+                }
+                const isDarkMode = (totalBrightness / (canvas.width * canvas.height)) < 127;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    let brightness = (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
+                    if (isDarkMode) brightness = 255 - brightness;
+                    const color = brightness < 180 ? 0 : 255; 
+                    data[i] = color;
+                    data[i + 1] = color;
+                    data[i + 2] = color;
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+                resolve(canvas.toDataURL('image/png'));
+            };
+            img.onerror = reject;
+            img.src = URL.createObjectURL(file);
+        });
+    };
+
+    // 2. Limpia los errores EXCLUSIVOS del OCR, sin dañar palabras reales
+    const cleanWordOcr = (wordText) => {
+        let cleaned = wordText.replace(/["”’‘_]/g, '').trim();
+        if (!cleaned) return "";
+
+        // Remover puntuación indeseada SÓLO si parece un acorde
+        if (/^[A-G][b#]?(m|maj|min|sus|dim|aug|add|M|\d)*[.,;:]+$/i.test(cleaned)) {
+            cleaned = cleaned.replace(/[.,;:]+$/, '');
+        }
+
+        // Reparación de Falsos Sostenidos OCR (Ej: D/FX -> D/F#)
+        cleaned = cleaned.replace(/\/([A-G])[xX+4ÍiIlL´\`\'’](?:\b|\s|$)/g, '/$1#');
+        cleaned = cleaned.replace(/^([A-G])[xX+4ÍiIlL´\`\'’](m|maj|sus|dim|aug|add|\d|\b)/g, '$1#$2');
+        
+        cleaned = cleaned.replace(/maj\??7/gi, 'maj7');
+        cleaned = cleaned.replace(/^([A-G][#b]?m?)72\b/g, '$17');
+        
+        if (cleaned === 'HG') cleaned = 'G';
+        if (cleaned.toLowerCase() === 'b8bm7') cleaned = 'Bm7';
+        if (cleaned === 'CD') cleaned = 'C D';
+        if (cleaned === 'Fo' || cleaned === 'F.') cleaned = 'F';
+        
+        // Quitar un solo corchete aleatorio de Tesseract
+        cleaned = cleaned.replace(/^\[([A-G][#b]?(m|maj|min|sus|dim|aug|add|M|\d)*)\]?$/, '$1');
+
+        return cleaned;
+    };
+
+    // 3. LA MAGIA GEOMÉTRICA: Asigna [Acordes] a palabras por cercanía (Eje X)
+    const processOcrDataGeometric = (data) => {
+        if (!data.lines || data.lines.length === 0) return data.text;
+
+        const regex = getChordRegex();
+        // Función estricta para saber si una palabra individual es un acorde real
+        const isActualChord = (text) => {
+            const matches = [...text.matchAll(regex)];
+            return matches.length > 0 && matches[0][0].length === text.length;
+        };
+
+        // PASO A: Estructurar cada línea y limpiarla
+        let processedLines = data.lines.map(line => {
+            let words = [];
+            line.words.forEach(w => {
+                let cleanText = cleanWordOcr(w.text);
+                if (!cleanText) return;
+                
+                // Si la limpieza devolvió múltiples palabras ("C D"), las separamos
+                if (cleanText.includes(' ')) {
+                    let parts = cleanText.split(' ');
+                    parts.forEach((p, idx) => {
+                        if (p) words.push({ text: p, x0: w.bbox.x0 + (idx * 15) });
+                    });
+                } else {
+                    words.push({ text: cleanText, x0: w.bbox.x0 });
+                }
+            });
+
+            let lineText = words.map(w => w.text).join(' ');
+            
+            // Validar de qué tipo es la línea entera
+            let isMarker = /^(intro|solo|interludio|puente|coro|verso|verse|bridge)\b/i.test(lineText.trim());
+            let testLine = lineText.replace(/^(intro|solo|interludio|puente|coro|verso|verse|bridge)\s*[:\-]?\s*/i, '');
+            
+            let isChord = false;
+            const chordsMatch = [...testLine.matchAll(regex)];
+            if (chordsMatch.length > 0) {
+                let tempTest = testLine;
+                for (let i = chordsMatch.length - 1; i >= 0; i--) {
+                    let c = chordsMatch[i];
+                    tempTest = tempTest.slice(0, c.index) + ' '.repeat(c[0].length) + tempTest.slice(c.index + c[0].length);
+                }
+                const leftovers = tempTest.replace(/[\s|:\-\/()[\]{}]/g, '').replace(/^[xX\d]+$/g, '');
+                if (leftovers.length === 0) isChord = true;
+            }
+
+            return { words, text: lineText, isMarkerLine: isMarker, isChordLine: isChord };
+        });
+
+        // PASO B: Combinar la coordenada X del acorde con la de la Letra
+        let finalOutput = [];
+        for (let i = 0; i < processedLines.length; i++) {
+            let currentLine = processedLines[i];
+            if (currentLine.words.length === 0) continue;
+
+            if (currentLine.isChordLine) {
+                let nextLine = (i + 1 < processedLines.length) ? processedLines[i + 1] : null;
+
+                // Si es un Intro o NO hay letra abajo: Solo formatea con corchetes en su sitio.
+                if (currentLine.isMarkerLine || !nextLine || nextLine.isChordLine || nextLine.isMarkerLine) {
+                    let formatted = currentLine.words.map(w => {
+                        if (isActualChord(w.text) && !/^(intro|solo|interludio|puente|coro|verso|verse|bridge)$/i.test(w.text)) {
+                            return `[${w.text}]`;
+                        }
+                        return w.text;
+                    }).join(' ');
+                    finalOutput.push(formatted);
+                } 
+                // Si la línea inferior SÍ es letra: Pegamos el acorde a la palabra más cercana.
+                else {
+                    let lyricWords = nextLine.words.map(w => ({ text: w.text, x0: w.x0, chordsAssigned: [] }));
+                    let floatingSymbolsBefore = [];
+                    let floatingSymbolsAfter = [];
+
+                    currentLine.words.forEach(chordWord => {
+                        // Es un Acorde Real
+                        if (isActualChord(chordWord.text) && !/^(intro|solo|interludio|puente|coro|verso|verse|bridge)$/i.test(chordWord.text)) {
+                            
+                            let closestLyric = null;
+                            let minDistance = Infinity;
+
+                            // Buscar la palabra de la letra con la posición en PÍXELES más cercana
+                            lyricWords.forEach(lw => {
+                                let dist = Math.abs(chordWord.x0 - lw.x0);
+                                if (dist < minDistance) {
+                                    minDistance = dist;
+                                    closestLyric = lw;
+                                }
+                            });
+
+                            if (closestLyric) {
+                                closestLyric.chordsAssigned.push(chordWord.text);
+                            }
+                        } 
+                        // No es un acorde (ej: un símbolo ||:)
+                        else {
+                            if (lyricWords.length > 0) {
+                                if (chordWord.x0 < lyricWords[0].x0) {
+                                    floatingSymbolsBefore.push(chordWord.text);
+                                } else {
+                                    floatingSymbolsAfter.push(chordWord.text);
+                                }
+                            }
+                        }
+                    });
+
+                    // Construimos la línea de letra ya formateada con [Acorde]Palabra
+                    let mergedLineStr = lyricWords.map(lw => {
+                        let chordStr = lw.chordsAssigned.map(c => `[${c}]`).join('');
+                        return chordStr + lw.text;
+                    }).join(' ');
+
+                    // Agregamos barras (||:) si existían al principio o al final de los acordes
+                    if (floatingSymbolsBefore.length > 0) {
+                        mergedLineStr = floatingSymbolsBefore.join(' ') + ' ' + mergedLineStr;
+                    }
+                    if (floatingSymbolsAfter.length > 0) {
+                        mergedLineStr = mergedLineStr + ' ' + floatingSymbolsAfter.join(' ');
+                    }
+
+                    finalOutput.push(mergedLineStr);
+                    i++; // Saltamos la línea de letra porque ya la hemos combinado
+                }
+            } else {
+                // Es letra normal o texto puro, no se toca.
+                finalOutput.push(currentLine.text);
+            }
+        }
+
+        return finalOutput.join('\n');
+    };
+
     // --- UI, STATE, i18n & EVENT HANDLING ---
     const showMessage = (key, type = 'info', extraData) => {
         const lang = elements.languageSelectModal.value;
@@ -412,6 +659,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const processConversion = (showSuccessMsg = true) => {
         if (!elements.inputTextbox.value.trim()) { if (showSuccessMsg) showMessage('msgNothingToConvert', 'warning'); return; }
         saveStateForUndo();
+        // Ejecutamos convertirAWorshipTools, esto permite que si alguien edita algo manual en Entrada, se repare en la Salida
         const converted = convertirAWorshipTools(elements.inputTextbox.value);
         updateUIFromState({ output: converted });
         if (showSuccessMsg) showMessage('msgConversionSuccess', 'success');
@@ -500,7 +748,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isAutoConvert && lastInput) { processConversion(false); }
     };
 
-    // --- EVENT LISTENERS ---
     elements.convertButton.addEventListener('click', () => processConversion());
     elements.inputTextbox.addEventListener('input', () => { if (elements.autoConvertToggle.checked) processConversion(false); });
     elements.copyButton.addEventListener('click', () => {
@@ -513,11 +760,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     elements.undoButton.addEventListener('click', undo);
     elements.loadFileButton.addEventListener('click', () => elements.fileInput.click());
+    
     elements.fileInput.addEventListener('change', e => {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
         reader.onload = evt => {
+            saveStateForUndo();
             elements.inputTextbox.value = evt.target.result;
             showMessage('msgFileLoaded', 'info', file.name);
             processConversion(true);
@@ -525,13 +774,72 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsText(file);
         e.target.value = '';
     });
+
+    // --- MANEJO DEL BOTÓN IMAGEN ---
+    elements.ocrButton.addEventListener('click', () => elements.imageInput.click());
+    
+    elements.imageInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        showMessage('msgOcrProcessing', 'info');
+        
+        elements.ocrButton.disabled = true;
+        const originalHtml = elements.ocrButton.innerHTML;
+        elements.ocrButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span data-i18n="ocrButton">...</span>';
+        
+        try {
+            const processedImageDataUrl = await preprocessImage(file);
+            
+            // Solución de seguridad (CORS) para Archivos Locales:
+            const worker = await Tesseract.createWorker('spa', 1, {
+                workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js',
+                langPath: 'https://tessdata.projectnaptha.com/4.0.0',
+                corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@5'
+            });
+            
+            await worker.setParameters({ tessedit_pageseg_mode: 6 });
+            
+            const { data } = await worker.recognize(processedImageDataUrl);
+            const reconstructedText = processOcrDataGeometric(data);
+            
+            saveStateForUndo();
+            elements.inputTextbox.value = reconstructedText;
+            showMessage('msgOcrSuccess', 'success');
+            
+            if (elements.autoConvertToggle.checked) {
+                processConversion(false);
+            }
+            
+            await worker.terminate();
+        } catch (err) {
+            console.error("Error OCR:", err);
+            showMessage('msgOcrError', 'error');
+        } finally {
+            elements.ocrButton.disabled = false;
+            elements.ocrButton.innerHTML = originalHtml;
+            setLanguage(elements.languageSelectModal.value);
+            e.target.value = '';
+        }
+    });
+
     ['dragover', 'dragleave', 'drop'].forEach(evt => elements.inputTextbox.addEventListener(evt, e => e.preventDefault()));
     elements.inputTextbox.addEventListener('dragover', () => elements.inputTextbox.classList.add('drag-over'));
     elements.inputTextbox.addEventListener('dragleave', () => elements.inputTextbox.classList.remove('drag-over'));
     elements.inputTextbox.addEventListener('drop', e => {
         elements.inputTextbox.classList.remove('drag-over');
-        if (e.dataTransfer.files[0]) { elements.fileInput.files = e.dataTransfer.files; elements.fileInput.dispatchEvent(new Event('change')); }
+        if (e.dataTransfer.files[0]) {
+            const file = e.dataTransfer.files[0];
+            if (file.type.startsWith('image/')) {
+                elements.imageInput.files = e.dataTransfer.files; 
+                elements.imageInput.dispatchEvent(new Event('change'));
+            } else {
+                elements.fileInput.files = e.dataTransfer.files; 
+                elements.fileInput.dispatchEvent(new Event('change')); 
+            }
+        }
     });
+    
     elements.exportTxtButton.addEventListener('click', () => {
         if (!elements.outputTextbox.value.trim()) return showMessage('msgNothingToExport', 'warning');
         const title = (elements.outputTextbox.value.split('\n')[0] || 'cancion').replace(/\[.*?\]/g, '').trim();
@@ -546,7 +854,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.transposeUpButton.addEventListener('click', () => transposeSong(1));
     elements.transposeDownButton.addEventListener('click', () => transposeSong(-1));
     
-    // Settings Modal Listeners
+    // Configuración Modal
     elements.settingsButton.addEventListener('click', () => { elements.settingsModal.style.display = 'flex'; });
     elements.closeModalButton.addEventListener('click', () => { elements.settingsModal.style.display = 'none'; });
     window.addEventListener('click', (e) => { if (e.target == elements.settingsModal) elements.settingsModal.style.display = 'none'; });
@@ -560,7 +868,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     elements.languageSelectModal.addEventListener('change', (e) => setLanguage(e.target.value));
     elements.autoConvertToggle.addEventListener('change', (e) => localStorage.setItem('autoConvert', e.target.checked));
-
 
     initializeApp();
 });
