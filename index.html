@@ -30,8 +30,8 @@
     --bg-light: #f3f4f6;
     --text-light: #1f2937;
     --text-muted-light: #6b7280;
-    --blob-1: #c4b5fd; /* Violeta claro */
-    --blob-2: #93c5fd; /* Azul claro */
+    --blob-1: #c4b5fd; 
+    --blob-2: #93c5fd; 
     --glass-bg: rgba(255, 255, 255, 0.65);
     --glass-border: rgba(255, 255, 255, 0.5);
     --glass-input: rgba(255, 255, 255, 0.4);
@@ -40,8 +40,8 @@
     --dark-bg: #0f172a;
     --dark-text: #f3f4f6;
     --dark-text-muted: #9ca3af;
-    --dark-blob-1: #4c1d95; /* Violeta oscuro */
-    --dark-blob-2: #1e3a8a; /* Azul oscuro */
+    --dark-blob-1: #4c1d95; 
+    --dark-blob-2: #1e3a8a; 
     --dark-glass-bg: rgba(30, 41, 59, 0.65);
     --dark-glass-border: rgba(51, 65, 85, 0.5);
     --dark-glass-input: rgba(15, 23, 42, 0.4);
@@ -61,7 +61,7 @@
     transition: background-color 0.4s ease, color 0.4s ease;
   }
 
-  /* Animación de los Orbes (Efecto detrás del cristal) */
+  /* Animación de Orbes Neón (Efecto Cristal) */
   body::before, body::after {
     content: '';
     position: fixed;
@@ -72,17 +72,8 @@
     animation: float 20s infinite alternate ease-in-out;
     transition: background-color 0.4s ease;
   }
-  body::before {
-    width: 450px; height: 450px;
-    background: var(--blob-1);
-    top: -100px; left: -100px;
-  }
-  body::after {
-    width: 550px; height: 550px;
-    background: var(--blob-2);
-    bottom: -150px; right: -150px;
-    animation-delay: -10s;
-  }
+  body::before { width: 450px; height: 450px; background: var(--blob-1); top: -100px; left: -100px; }
+  body::after { width: 550px; height: 550px; background: var(--blob-2); bottom: -150px; right: -150px; animation-delay: -10s; }
 
   @keyframes float {
     0% { transform: translate(0, 0) scale(1); }
@@ -100,48 +91,23 @@
     --glass-input: var(--dark-glass-input);
   }
 
-  /* Cabecera Centrada */
   .header {
-    max-width: 1400px; 
-    margin: 0 auto 40px auto; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
-    text-align: center;
-    gap: 10px;
+    max-width: 1400px; margin: 0 auto 40px auto; 
+    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 10px;
   }
   
   h1 { 
-    font-size: 3.5em; 
-    font-weight: 900; 
-    margin: 0;
-    letter-spacing: -0.03em;
+    font-size: 3.5em; font-weight: 900; margin: 0; letter-spacing: -0.03em;
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent;
-    background-clip: text; color: transparent;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent;
   }
   
-  .tagline { 
-    font-size: 1.2em; 
-    font-weight: 400;
-    color: var(--text-muted-light); 
-    margin: 0 0 15px 0;
-  }
+  .tagline { font-size: 1.2em; font-weight: 400; color: var(--text-muted-light); margin: 0 0 15px 0; }
 
   .header-controls { 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    gap: 20px; 
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    padding: 10px 20px;
-    border-radius: 30px;
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex; align-items: center; justify-content: center; gap: 20px; 
+    background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    padding: 10px 20px; border-radius: 30px; border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   }
   
   .auto-convert-group { display: flex; align-items: center; gap: 10px; font-size: 0.95em; font-weight: 600; color: var(--text-light); }
@@ -154,32 +120,17 @@
 
   .container { display: flex; gap: 25px; max-width: 1400px; margin: 20px auto; align-items: stretch; }
   
-  /* Paneles Efecto Cristal */
   .panel { 
     flex: 1; display: flex; flex-direction: column; 
-    background: var(--glass-bg); 
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--border-radius); 
-    padding: 30px; 
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); 
-    border: 1px solid var(--glass-border); 
+    background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--border-radius); padding: 30px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); border: 1px solid var(--glass-border); 
   }
 
   textarea {
-    width: 100%; height: 50vh; padding: 18px; 
-    border: 1px solid var(--glass-border);
-    border-radius: 12px; font-family: var(--font-mono); font-size: 1.05em;
-    line-height: 1.6; resize: vertical; 
-    background-color: var(--glass-input);
-    color: var(--text-light); box-sizing: border-box; transition: all 0.3s ease;
+    width: 100%; height: 50vh; padding: 18px; border: 1px solid var(--glass-border); border-radius: 12px; font-family: var(--font-mono); font-size: 1.05em;
+    line-height: 1.6; resize: vertical; background-color: var(--glass-input); color: var(--text-light); box-sizing: border-box; transition: all 0.3s ease;
   }
-  textarea:focus { 
-    outline: none; 
-    border-color: var(--primary-color); 
-    background-color: var(--glass-bg);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color) 15%, transparent); 
-  }
+  textarea:focus { outline: none; border-color: var(--primary-color); background-color: var(--glass-bg); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color) 15%, transparent); }
   textarea.drag-over { border: 2px dashed var(--primary-color); background-color: color-mix(in srgb, var(--primary-color) 10%, transparent); }
 
   h2 { font-size: 1.4em; font-weight: 700; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin: 0 0 20px 0; color: var(--text-light); }
@@ -190,10 +141,8 @@
 
   button {
     padding: 14px 20px; font-size: 0.95em; font-weight: 600; font-family: var(--font-primary);
-    border: none; border-radius: 10px; cursor: pointer; display: flex;
-    align-items: center; justify-content: center; gap: 8px; color: white;
-    transition: all 0.2s ease; background-size: 200% auto;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: white;
+    transition: all 0.2s ease; background-size: 200% auto; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   }
   button:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 8px rgba(0,0,0,0.1); }
   button:active { transform: translateY(1px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
@@ -211,13 +160,8 @@
   #settings-button:hover { background-color: var(--glass-input); }
   
   #preview-container { 
-    background: var(--glass-bg); 
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border); 
-    border-radius: var(--border-radius); 
-    padding: 30px; margin-top: 30px; max-width: 1400px; margin-left: auto; margin-right: auto; 
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+    background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: var(--border-radius); padding: 30px; margin-top: 30px; max-width: 1400px; margin-left: auto; margin-right: auto; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
   }
   .preview { font-family: var(--font-mono); white-space: pre-wrap; line-height: 1.7; font-size: 1.05em; }
   .preview .chord { font-weight: 700; color: var(--primary-color); }
@@ -245,8 +189,7 @@
   #reset-regex-button { background-color: #64748b; }
 
   @media (max-width: 900px) {
-    body { padding: 15px; } 
-    h1 { font-size: 2.2em; }
+    body { padding: 15px; } h1 { font-size: 2.2em; }
     .container { flex-direction: column !important; }
     textarea { height: 45vh; }
     .header-controls { flex-wrap: wrap; }
@@ -363,7 +306,6 @@ document.addEventListener('DOMContentLoaded', () => {
         regexErrorMessage: getEl('regex-error-message')
     };
 
-    // --- STATE & CONFIG ---
     let ACCORD_REGEX_STRING_GLOBAL;
     const DEFAULT_CHORD_REGEX = '\\b([A-G](?:#|b)?(?:m|maj|min|sus|dim|aug|add|M|\\d)*(?:\\s*\\/\\s*[A-G](?:#|b)?)?)(?!\\w)';
     let undoStack = [];
@@ -376,16 +318,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const translateSpanishChordsInLineAligned = (line) => {
         let translatedLine = line.replace(SPANISH_CHORD_REGEX, (match) => {
             let translated = match.replace(/(DO|RE|MI|FA|SOL|LA|SI)/gi, (m) => SPANISH_CHORDS_DICT[m.toUpperCase()]);
-            // Relleno espacial: si SOL se vuelve G, le agregamos espacios para que no se arruine la posición
             while(translated.length < match.length) {
                 translated += ' ';
             }
             return translated;
         });
-        
-        // Vacuna especial para mutaciones como EMm tras traducción
-        translatedLine = translatedLine.replace(/\bEMm\b/g, 'Em ');
-        
         return translatedLine;
     };
 
@@ -434,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     
-    // --- LÓGICA DE TEXTO TRADICIONAL ---
+    // --- NÚCLEO DE ESCANEO DE ACORDES UNIVERSAL (USADO POR TEXTO Y OCR) ---
     const getChordRegex = () => new RegExp(ACCORD_REGEX_STRING_GLOBAL, 'g');
     const extractChordsWithIndex = (line) => [...line.matchAll(getChordRegex())].map(m => ({ chord: m[0], index: m.index }));
 
@@ -443,7 +380,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const isPureChordLine = (line) => {
         if (!line.trim()) return false;
         let testLine = line.replace(/^(intro|solo|interludio|puente|coro|verso|verse|bridge)\s*[:\-]?\s*/i, '');
-        
         let tempTest = testLine;
         
         const amRegex = getChordRegex();
@@ -459,7 +395,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (amChords.length === 0 && spChords.length === 0) return false;
 
-        // Toleramos puntos y comas porque la gente a veces escribe "MIm."
         const leftovers = tempTest.replace(/[\s|:\-\/()[\]{}.,;]/g, '').replace(/^[xX\d]+$/g, '');
         return leftovers.length === 0;
     };
@@ -505,7 +440,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const nextLine = (i + 1 < lines.length) ? lines[i + 1] : null;
             
             if (isPureChordLine(currentLine)) {
-                // Traduce Español a Inglés antes de fusionar
                 currentLine = translateSpanishChordsInLineAligned(currentLine);
 
                 if (isMarkerLine(currentLine)) {
@@ -552,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('msgTransposed', 'info', steps);
     };
 
-    // --- NUEVA LÓGICA OCR (GEOMETRÍA Y TRADUCCIÓN) ---
+    // --- OCR GEOMÉTRICO (COMPATIBLE CON CÓDIGO MANUAL) ---
 
     const preprocessImage = (file) => {
         return new Promise((resolve, reject) => {
@@ -599,12 +533,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const cleanWordOcr = (wordText) => {
         let cleaned = wordText.replace(/["”’‘_]/g, '').trim();
         cleaned = cleaned.replace(/[^a-zA-Z0-9#b+\-/[\]().,;:|¿?¡!' áéíóúÁÉÍÓÚñÑ]/g, '');
-
         if (!cleaned) return "";
 
-        // ESCUDO: Proteger palabras españolas comunes
         if (/^(al|el|del|y|en|un|una|que|por|con|su|tus|mis|las|los|de)$/i.test(cleaned)) return cleaned;
-
         if (/^([A-G]|DO|RE|MI|FA|SOL|LA|SI)[b#]?(m|maj|min|sus|dim|aug|add|M|\d)*[.,;:]+$/i.test(cleaned)) {
             cleaned = cleaned.replace(/[.,;:]+$/, '');
         }
@@ -614,7 +545,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cleaned = cleaned.replace(/maj\??7/gi, 'maj7');
         cleaned = cleaned.replace(/^([A-G][#b]?m?)72\b/g, '$17');
         
-        // Falsos OCR Español
         cleaned = cleaned.replace(/\bS0L\b/gi, 'SOL');
         cleaned = cleaned.replace(/\b5OL\b/gi, 'SOL');
         cleaned = cleaned.replace(/\bD0\b/gi, 'DO');
@@ -622,8 +552,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cleaned = cleaned.replace(/\bMlm\b/gi, 'MIm');
         cleaned = cleaned.replace(/\bMIM\b/gi, 'MIm');
         cleaned = cleaned.replace(/\bFAX\b/gi, 'FA#');
-        // Vacuna EMm
-        cleaned = cleaned.replace(/\bEMm\b/gi, 'Em');
         
         if (cleaned === 'HG') cleaned = 'G';
         if (cleaned.toLowerCase() === 'b8bm7') cleaned = 'Bm7';
@@ -633,6 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cleaned = cleaned.replace(/Fitm/g, 'F#m');
         cleaned = cleaned.replace(/\bDE\b/g, 'D E');
         cleaned = cleaned.replace(/E\/AA/g, 'E/A A');
+        if (cleaned === 'E#') cleaned = 'El';
         
         cleaned = cleaned.replace(/^\[([A-G][#b]?(m|maj|min|sus|dim|aug|add|M|\d)*)\]?$/, '$1');
 
@@ -642,24 +571,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const processOcrDataGeometric = (data) => {
         if (!data.words || data.words.length === 0) return data.text || "";
 
-        const regex = getChordRegex();
-        const isActualChord = (text) => {
-            const matches = [...text.matchAll(regex)];
-            return matches.length > 0 && matches[0][0].length === text.length;
-        };
-
         let validWords = [];
         data.words.forEach(w => {
             const text = w.text.trim(); 
             if (text.length > 0) {
-                validWords.push({
-                    text: text,
-                    x0: w.bbox.x0,
-                    x1: w.bbox.x1,
-                    y0: w.bbox.y0,
-                    y1: w.bbox.y1,
-                    centerY: (w.bbox.y0 + w.bbox.y1) / 2
-                });
+                validWords.push({ text: text, x0: w.bbox.x0, x1: w.bbox.x1, y0: w.bbox.y0, y1: w.bbox.y1, centerY: (w.bbox.y0 + w.bbox.y1) / 2 });
             }
         });
         
@@ -689,9 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let charWidths = [];
         validWords.forEach(w => {
-            if (/[a-zA-Z0-9]/.test(w.text)) {
-                charWidths.push((w.x1 - w.x0) / w.text.length);
-            }
+            if (/[a-zA-Z0-9]/.test(w.text)) charWidths.push((w.x1 - w.x0) / w.text.length);
         });
         charWidths.sort((a, b) => a - b);
         const avgCharWidth = charWidths.length > 0 ? charWidths[Math.floor(charWidths.length / 2)] : 10;
@@ -715,112 +629,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
             
-            let lineText = lineWordsProcessed.map(w => w.text).join(' ');
-            let isMarker = /^(intro|solo|interludio|puente|coro|verso|verse|bridge)\b/i.test(lineText.trim());
-            let testLine = lineText.replace(/^(intro|solo|interludio|puente|coro|verso|verse|bridge)\s*[:\-]?\s*/i, '');
-            
-            let isChord = false;
-            let tempTest = testLine;
-            
-            const amChords = [...tempTest.matchAll(regex)];
-            for (let i = amChords.length - 1; i >= 0; i--) {
-                tempTest = tempTest.slice(0, amChords[i].index) + ' '.repeat(amChords[i][0].length) + tempTest.slice(amChords[i].index + amChords[i][0].length);
-            }
-            
-            const spChords = [...tempTest.matchAll(SPANISH_CHORD_REGEX)];
-            for (let i = spChords.length - 1; i >= 0; i--) {
-                tempTest = tempTest.slice(0, spChords[i].index) + ' '.repeat(spChords[i][0].length) + tempTest.slice(spChords[i].index + spChords[i][0].length);
-            }
-
-            if (amChords.length > 0 || spChords.length > 0) {
-                const leftovers = tempTest.replace(/[\s|:\-\/()[\]{}.,;]/g, '').replace(/^[xX\d]+$/g, '');
-                if (leftovers.length === 0) isChord = true;
-            }
-
-            if (isChord) {
-                lineWordsProcessed.forEach(w => {
-                    w.text = w.text.replace(SPANISH_CHORD_REGEX, (match) => {
-                        return match.replace(/(DO|RE|MI|FA|SOL|LA|SI)/gi, (m) => SPANISH_CHORDS_DICT[m.toUpperCase()]);
-                    });
-                    // Vacuna final post-traduccion OCR
-                    w.text = w.text.replace(/\bEMm\b/g, 'Em');
-                });
-                lineText = lineWordsProcessed.map(w => w.text).join(' ');
-            }
-
-            return { words: lineWordsProcessed, text: lineText, isMarkerLine: isMarker, isChordLine: isChord };
+            let lineStr = "";
+            lineWordsProcessed.forEach(w => {
+                let targetIndex = Math.max(0, Math.round((w.x0 - minX) / avgCharWidth));
+                if (targetIndex < lineStr.length) targetIndex = lineStr.length + 1;
+                while (lineStr.length < targetIndex) lineStr += " ";
+                lineStr += w.text;
+            });
+            return lineStr;
         });
 
-        let finalOutput = [];
-        
-        for (let i = 0; i < processedLines.length; i++) {
-            let currentLine = processedLines[i];
-            if (currentLine.words.length === 0) continue;
-
-            if (currentLine.isChordLine) {
-                let nextLine = (i + 1 < processedLines.length) ? processedLines[i + 1] : null;
-
-                if (currentLine.isMarkerLine || !nextLine || nextLine.isChordLine || nextLine.isMarkerLine) {
-                    let lineStr = "";
-                    currentLine.words.forEach(w => {
-                        let targetIndex = Math.max(0, Math.round((w.x0 - minX) / avgCharWidth));
-                        if (targetIndex < lineStr.length) targetIndex = lineStr.length + 1; 
-                        while (lineStr.length < targetIndex) lineStr += " ";
-                        
-                        let bareChord = w.text.replace(/^[()[\]{}]+|[()[\]{}]+$/g, '');
-                        if (isActualChord(bareChord) && !/^(intro|solo|interludio|puente|coro|verso|verse|bridge)$/i.test(bareChord)) {
-                            lineStr += `[${bareChord}]`;
-                        } else {
-                            lineStr += w.text;
-                        }
-                    });
-                    finalOutput.push(lineStr);
-                } else {
-                    let lyricStr = "";
-                    
-                    nextLine.words.forEach(w => {
-                        let targetIndex = Math.max(0, Math.round((w.x0 - minX) / avgCharWidth));
-                        if (targetIndex < lyricStr.length) targetIndex = lyricStr.length + 1;
-                        while (lyricStr.length < targetIndex) lyricStr += " ";
-                        lyricStr += w.text;
-                    });
-                    
-                    let chordInsertions = [];
-                    currentLine.words.forEach(cw => {
-                        let cleanChordText = cw.text.replace(/^[()[\]{}]+|[()[\]{}]+$/g, '');
-                        let targetIndex = Math.max(0, Math.round((cw.x0 - minX) / avgCharWidth));
-                        
-                        if (isActualChord(cleanChordText) && !/^(intro|solo|interludio|puente|coro|verso|verse|bridge)$/i.test(cleanChordText)) {
-                            chordInsertions.push({ text: `[${cleanChordText}]`, index: targetIndex });
-                        } else {
-                            chordInsertions.push({ text: cw.text, index: targetIndex });
-                        }
-                    });
-                    
-                    chordInsertions.sort((a, b) => b.index - a.index);
-                    
-                    chordInsertions.forEach(ins => {
-                        let idx = ins.index;
-                        while (lyricStr.length < idx) lyricStr += " ";
-                        lyricStr = lyricStr.slice(0, idx) + ins.text + lyricStr.slice(idx);
-                    });
-
-                    finalOutput.push(lyricStr);
-                    i++; 
-                }
-            } else {
-                let lineStr = "";
-                currentLine.words.forEach(w => {
-                    let targetIndex = Math.max(0, Math.round((w.x0 - minX) / avgCharWidth));
-                    if (targetIndex < lineStr.length) targetIndex = lineStr.length + 1;
-                    while (lineStr.length < targetIndex) lineStr += " ";
-                    lineStr += w.text;
-                });
-                finalOutput.push(lineStr);
-            }
-        }
-
-        return finalOutput.join('\n');
+        // En lugar de que el OCR intente combinar, ahora el OCR simplemente reconstruye el texto respetando los espacios, 
+        // y le pasamos todo el texto crudo y perfectamente alineado a la función convertirAWorshipTools.
+        // Esto garantiza que la lógica de texto manual y la del OCR sean 100% idénticas.
+        return processedLines.join('\n');
     };
 
     // --- UI, STATE, i18n & EVENT HANDLING ---
@@ -986,13 +808,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const reconstructedText = processOcrDataGeometric(data);
             
             saveStateForUndo();
+            // Pegamos el texto perfectamente espaciado en Entrada
             elements.inputTextbox.value = reconstructedText;
-            showMessage('msgOcrSuccess', 'success');
             
+            // Si el switch está encendido, forzamos que se convierta, fusionando todo mágicamente en Salida
             if (elements.autoConvertToggle.checked) {
                 processConversion(false);
             }
             
+            showMessage('msgOcrSuccess', 'success');
             await worker.terminate();
         } catch (err) {
             console.error("Error OCR:", err);
