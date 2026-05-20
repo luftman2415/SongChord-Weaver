@@ -6,7 +6,7 @@
   <title>SongChord Weaver Pro 🎸🎹</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
   <link rel="icon" type="image/x-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🎶%3C/text%3E%3C/svg%3E">
   
@@ -26,20 +26,27 @@
     --warning-color: #f59e0b;
     --info-color: #0ea5e9;
 
-    --bg-light: #f9fafb;
-    --surface-light: #ffffff;
+    /* Light Theme Variables */
+    --bg-light: #f3f4f6;
     --text-light: #1f2937;
     --text-muted-light: #6b7280;
-    --border-light: #e5e7eb;
+    --blob-1: #c4b5fd; /* Violeta claro */
+    --blob-2: #93c5fd; /* Azul claro */
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-input: rgba(255, 255, 255, 0.4);
     
-    --dark-bg: #111827;
-    --dark-surface: #1f2937;
+    /* Dark Theme Variables */
+    --dark-bg: #0f172a;
     --dark-text: #f3f4f6;
     --dark-text-muted: #9ca3af;
-    --dark-border: #374151;
+    --dark-blob-1: #4c1d95; /* Violeta oscuro */
+    --dark-blob-2: #1e3a8a; /* Azul oscuro */
+    --dark-glass-bg: rgba(30, 41, 59, 0.65);
+    --dark-glass-border: rgba(51, 65, 85, 0.5);
+    --dark-glass-input: rgba(15, 23, 42, 0.4);
 
-    --shadow-color: rgba(0, 0, 0, 0.08);
-    --border-radius: 12px;
+    --border-radius: 16px;
   }
 
   body {
@@ -49,116 +56,207 @@
     margin: 0;
     padding: 20px;
     min-height: 100vh;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative;
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  /* Animación de los Orbes (Efecto detrás del cristal) */
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: -1;
+    opacity: 0.7;
+    animation: float 20s infinite alternate ease-in-out;
+    transition: background-color 0.4s ease;
+  }
+  body::before {
+    width: 450px; height: 450px;
+    background: var(--blob-1);
+    top: -100px; left: -100px;
+  }
+  body::after {
+    width: 550px; height: 550px;
+    background: var(--blob-2);
+    bottom: -150px; right: -150px;
+    animation-delay: -10s;
+  }
+
+  @keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(60px, 60px) scale(1.1); }
   }
   
   body.dark-mode {
     --bg-light: var(--dark-bg);
-    --surface-light: var(--dark-surface);
     --text-light: var(--dark-text);
     --text-muted-light: var(--dark-text-muted);
-    --border-light: var(--dark-border);
+    --blob-1: var(--dark-blob-1);
+    --blob-2: var(--dark-blob-2);
+    --glass-bg: var(--dark-glass-bg);
+    --glass-border: var(--dark-glass-border);
+    --glass-input: var(--dark-glass-input);
   }
 
+  /* Cabecera Centrada */
   .header {
-    max-width: 1400px; margin: 0 auto 30px auto; display: flex;
-    justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;
+    max-width: 1400px; 
+    margin: 0 auto 40px auto; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    text-align: center;
+    gap: 10px;
   }
   
   h1 { 
-    font-size: 2.8em; font-weight: 700; margin-bottom: 5px;
-    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 3.5em; 
+    font-weight: 900; 
+    margin: 0;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
     background-clip: text; color: transparent;
   }
-  .tagline { font-size: 1.1em; color: var(--text-muted-light); }
+  
+  .tagline { 
+    font-size: 1.2em; 
+    font-weight: 400;
+    color: var(--text-muted-light); 
+    margin: 0 0 15px 0;
+  }
 
-  .header-controls { display: flex; align-items: center; gap: 15px; margin-top: 10px; }
-  .auto-convert-group { display: flex; align-items: center; gap: 10px; font-size: 0.9em; color: var(--text-light); }
-  .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+  .header-controls { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    gap: 20px; 
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  }
+  
+  .auto-convert-group { display: flex; align-items: center; gap: 10px; font-size: 0.95em; font-weight: 600; color: var(--text-light); }
+  .switch { position: relative; display: inline-block; width: 46px; height: 26px; }
   .switch input { display: none; }
-  .slider { position: absolute; cursor: pointer; inset: 0; background-color: #ccc; transition: .4s; border-radius: 28px; }
-  .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+  .slider { position: absolute; cursor: pointer; inset: 0; background-color: #cbd5e1; transition: .4s; border-radius: 26px; }
+  .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
   input:checked + .slider { background-color: var(--primary-color); }
-  input:checked + .slider:before { transform: translateX(22px); }
+  input:checked + .slider:before { transform: translateX(20px); }
 
-  .container { display: flex; gap: 20px; max-width: 1400px; margin: 20px auto; align-items: stretch; }
-  .panel { flex: 1; display: flex; flex-direction: column; background-color: var(--surface-light); border-radius: var(--border-radius); padding: 25px; box-shadow: 0 4px 25px var(--shadow-color); border: 1px solid var(--border-light); }
+  .container { display: flex; gap: 25px; max-width: 1400px; margin: 20px auto; align-items: stretch; }
+  
+  /* Paneles Efecto Cristal */
+  .panel { 
+    flex: 1; display: flex; flex-direction: column; 
+    background: var(--glass-bg); 
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--border-radius); 
+    padding: 30px; 
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); 
+    border: 1px solid var(--glass-border); 
+  }
 
   textarea {
-    width: 100%; height: 55vh; padding: 15px; border: 1px solid var(--border-light);
-    border-radius: var(--border-radius); font-family: var(--font-mono); font-size: 1em;
-    line-height: 1.6; resize: vertical; background-color: var(--bg-light);
-    color: var(--text-light); box-sizing: border-box; transition: all 0.2s ease;
+    width: 100%; height: 50vh; padding: 18px; 
+    border: 1px solid var(--glass-border);
+    border-radius: 12px; font-family: var(--font-mono); font-size: 1.05em;
+    line-height: 1.6; resize: vertical; 
+    background-color: var(--glass-input);
+    color: var(--text-light); box-sizing: border-box; transition: all 0.3s ease;
   }
-  textarea:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent); }
-  textarea.drag-over { border: 2px dashed var(--primary-color); background-color: color-mix(in srgb, var(--primary-color) 5%, transparent); }
+  textarea:focus { 
+    outline: none; 
+    border-color: var(--primary-color); 
+    background-color: var(--glass-bg);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-color) 15%, transparent); 
+  }
+  textarea.drag-over { border: 2px dashed var(--primary-color); background-color: color-mix(in srgb, var(--primary-color) 10%, transparent); }
 
-  h2 { font-size: 1.5em; font-weight: 600; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; margin: 0 0 20px 0; color: var(--text-light); }
-  .button-group { display: flex; flex-direction: column; gap: 10px; margin-top: auto; padding-top: 20px; }
+  h2 { font-size: 1.4em; font-weight: 700; border-bottom: 1px solid var(--glass-border); padding-bottom: 12px; margin: 0 0 20px 0; color: var(--text-light); }
   
-  .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .button-row-input { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; } 
+  .button-group { display: flex; flex-direction: column; gap: 12px; margin-top: auto; padding-top: 25px; }
+  .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .button-row-input { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; } 
 
   button {
-    padding: 12px 18px; font-size: 0.95em; font-weight: 600; font-family: var(--font-primary);
-    border: none; border-radius: var(--border-radius); cursor: pointer; display: flex;
+    padding: 14px 20px; font-size: 0.95em; font-weight: 600; font-family: var(--font-primary);
+    border: none; border-radius: 10px; cursor: pointer; display: flex;
     align-items: center; justify-content: center; gap: 8px; color: white;
     transition: all 0.2s ease; background-size: 200% auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   }
-  button:hover { filter: brightness(1.1); }
-  button:active { transform: scale(0.97); }
-  button:disabled { background-image: none !important; background-color: #9ca3af !important; cursor: not-allowed; transform: none; filter: none; opacity: 0.8; }
+  button:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 8px rgba(0,0,0,0.1); }
+  button:active { transform: translateY(1px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  button:disabled { background-image: none !important; background-color: #9ca3af !important; cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.7; }
 
   #convert-button { background-image: linear-gradient(to right, var(--gradient-start) 0%, var(--primary-color) 51%, var(--gradient-start) 100%); }
   #copy-button { background-color: var(--success-color); }
   #clear-button { background-color: var(--error-color); }
-  #undo-button { background-color: var(--warning-color); color: #1f2937; }
+  #undo-button { background-color: var(--warning-color); color: #fff; }
   #load-file-button { background-color: #4b5563; }
   #ocr-button { background-color: var(--info-color); } 
   #export-txt-button { background-color: #4b5563; }
   .transpose-button { background-color: var(--primary-color); }
-  #settings-button { background-color: #374151; }
+  #settings-button { background-color: transparent; border: 1px solid var(--glass-border); color: var(--text-light); box-shadow: none; }
+  #settings-button:hover { background-color: var(--glass-input); }
   
-  #preview-container { background-color: var(--surface-light); border: 1px solid var(--border-light); border-radius: var(--border-radius); padding: 30px; margin-top: 30px; max-width: 1400px; margin-left: auto; margin-right: auto; }
-  .preview { font-family: var(--font-mono); white-space: pre-wrap; line-height: 1.7; font-size: 1em; }
-  .preview .chord { font-weight: bold; color: var(--primary-color); }
+  #preview-container { 
+    background: var(--glass-bg); 
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); 
+    border-radius: var(--border-radius); 
+    padding: 30px; margin-top: 30px; max-width: 1400px; margin-left: auto; margin-right: auto; 
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+  }
+  .preview { font-family: var(--font-mono); white-space: pre-wrap; line-height: 1.7; font-size: 1.05em; }
+  .preview .chord { font-weight: 700; color: var(--primary-color); }
   
-  #status-message { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150px); opacity: 0; min-width: 280px; padding: 15px 25px; font-size: 1.1em; font-weight: 600; text-align: center; border-radius: var(--border-radius); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); color: white; z-index: 2000; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  #status-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px); opacity: 0; min-width: 300px; padding: 16px 25px; font-size: 1.1em; font-weight: 600; text-align: center; border-radius: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); color: white; z-index: 2000; display: flex; align-items: center; justify-content: center; gap: 10px; }
   #status-message.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
   #status-message.success { background-color: var(--success-color); }
-  #status-message.info { background-color: var(--primary-color); }
-  #status-message.warning { background-color: var(--warning-color); color: var(--text-light); }
+  #status-message.info { background-color: var(--info-color); }
+  #status-message.warning { background-color: var(--warning-color); color: #fff; }
   #status-message.error { background-color: var(--error-color); }
   
-  .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6); justify-content: center; align-items: center; }
-  .modal-content { background-color: var(--surface-light); border: 1px solid var(--border-light); color: var(--text-light); margin: auto; padding: 30px; border-radius: var(--border-radius); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3); width: 90%; max-width: 500px; position: relative; }
-  .close-button { color: var(--text-muted-light); position: absolute; top: 15px; right: 25px; font-weight: bold; cursor: pointer; }
-  .modal-content h3 { color: var(--primary-color); border-bottom-color: var(--border-light); margin-top: 0; border-bottom: 1px solid var(--border-light); padding-bottom: 10px; margin-bottom: 20px; font-size: 1.6em;}
+  .modal { display: none; position: fixed; z-index: 2000; inset: 0; overflow: auto; background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
+  .modal-content { background: var(--glass-bg); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); color: var(--text-light); margin: auto; padding: 35px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); width: 90%; max-width: 500px; position: relative; }
+  .close-button { color: var(--text-muted-light); position: absolute; top: 15px; right: 25px; font-size: 28px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
+  .close-button:hover { color: var(--error-color); }
+  .modal-content h3 { color: var(--primary-color); border-bottom-color: var(--glass-border); margin-top: 0; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 25px; font-size: 1.6em; font-weight: 800;}
   .modal-section { margin-bottom: 25px; }
-  .modal-control-group { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 15px; background-color: var(--bg-light); padding: 15px; border-radius: 8px; }
+  .modal-control-group { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 15px; background-color: var(--glass-input); padding: 15px; border-radius: 10px; border: 1px solid var(--glass-border); }
   .modal-control-group label { margin-bottom: 0; font-weight: 600;}
   .modal-content label { display: block; margin-bottom: 8px; font-weight: 600; }
-  .modal-content input[type="text"] { width: 100%; box-sizing: border-box; padding: 10px; margin-bottom: 10px; border: 1px solid var(--border-light); border-radius: 5px; font-family: var(--font-mono); font-size: 0.95em; background-color: var(--bg-light); color: var(--text-light); }
-  #language-select-modal { background-color: var(--surface-light); color: var(--text-light); border-color: var(--border-light); border-radius: 5px; padding: 8px 12px; font-family: var(--font-primary);}
-  .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+  .modal-content input[type="text"] { width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 10px; border: 1px solid var(--glass-border); border-radius: 8px; font-family: var(--font-mono); font-size: 0.95em; background-color: var(--glass-input); color: var(--text-light); }
+  #language-select-modal { background-color: var(--glass-input); color: var(--text-light); border: 1px solid var(--glass-border); border-radius: 8px; padding: 10px 15px; font-family: var(--font-primary); font-weight: 600; outline: none;}
+  .modal-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-top: 30px; }
   #save-settings-button { background-image: linear-gradient(to right, var(--gradient-start) 0%, var(--primary-color) 51%, var(--gradient-start) 100%); }
-  #reset-regex-button { background-color: #4b5563; }
+  #reset-regex-button { background-color: #64748b; }
 
   @media (max-width: 900px) {
-    body { padding: 15px; } h1 { font-size: 2.2em; }
+    body { padding: 15px; } 
+    h1 { font-size: 2.2em; }
     .container { flex-direction: column !important; }
     textarea { height: 45vh; }
-    .header { flex-direction: column; align-items: center; text-align: center; }
+    .header-controls { flex-wrap: wrap; }
   }
   </style>
 </head>
 <body>
   <div class="header">
-    <div>
-      <h1 data-i18n="appTitle">SongChord Weaver Pro</h1>
-      <p class="tagline" data-i18n="appTagline">Transforma tus letras con acordes para WorshipTools.</p>
-    </div>
+    <h1 data-i18n="appTitle">SongChord Weaver Pro</h1>
+    <p class="tagline" data-i18n="appTagline">Transforma tus letras con acordes para WorshipTools.</p>
     <div class="header-controls">
       <div class="auto-convert-group">
         <span data-i18n="autoConvertLabel">Auto-Convertir</span>
@@ -227,7 +325,7 @@
       <div class="modal-section">
         <label for="chord-regex-input" data-i18n="regexLabel">Expresión Regular para Acordes:</label>
         <input type="text" id="chord-regex-input" />
-        <p style="font-size: 0.85em; color: var(--text-muted-light); margin-top: -5px;" data-i18n="regexHint">Avanzado: Define el patrón para identificar acordes.</p>
+        <p style="font-size: 0.85em; color: var(--text-muted-light); margin-top: -5px;" data-i18n="regexHint">Avanzado: Define el patrón matemático que el motor usa para identificar acordes. Modificar con precaución.</p>
         <div id="regex-error-message" style="color: var(--error-color); font-size: 0.9em; margin-top: 5px; display: none;"></div>
       </div>
       <div class="modal-buttons">
@@ -238,8 +336,7 @@
   </div>
 
   <div id="status-message"></div>
-  <p style="text-align:center; font-size: 0.9em; color: var(--text-muted-light); margin: 40px 0;">🎵 ICC Las Brisas - Ministerio de Alabanza
-© 2025 LUFTMANDMAURICIO</p>
+  <p style="text-align:center; font-size: 0.9em; font-weight: 600; color: var(--text-muted-light); margin: 50px 0;">🎵 © 2026 LUFTMANDMAURICIO.</p>
 
   <input type="file" id="file-input" accept=".txt, .pro, .chopro" style="display: none;" />
   <input type="file" id="image-input" accept="image/*" style="display: none;" />
@@ -272,7 +369,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let undoStack = [];
     const MAX_UNDO_STATES = 20;
 
-    // --- INTERNATIONALIZATION ---
+    // --- DICCIONARIO ESPAÑOL/LATINO ---
+    const SPANISH_CHORDS_DICT = { 'DO':'C', 'RE':'D', 'MI':'E', 'FA':'F', 'SOL':'G', 'LA':'A', 'SI':'B' };
+    const SPANISH_CHORD_REGEX = /\b(DO|RE|MI|FA|SOL|LA|SI)(?:#|b)?(?:m|maj|min|sus|dim|aug|add|M|\d)*(?:\/(?:DO|RE|MI|FA|SOL|LA|SI)(?:#|b)?)?(?!\w)/gi;
+
+    const translateSpanishChordsInLineAligned = (line) => {
+        let translatedLine = line.replace(SPANISH_CHORD_REGEX, (match) => {
+            let translated = match.replace(/(DO|RE|MI|FA|SOL|LA|SI)/gi, (m) => SPANISH_CHORDS_DICT[m.toUpperCase()]);
+            // Relleno espacial: si SOL se vuelve G, le agregamos espacios para que no se arruine la posición
+            while(translated.length < match.length) {
+                translated += ' ';
+            }
+            return translated;
+        });
+        
+        // Vacuna especial para mutaciones como EMm tras traducción
+        translatedLine = translatedLine.replace(/\bEMm\b/g, 'Em ');
+        
+        return translatedLine;
+    };
+
     const translations = {
         es: {
             appTitle: "SongChord Weaver Pro", appTagline: "Transforma tus letras con acordes para WorshipTools.",
@@ -282,7 +398,7 @@ document.addEventListener('DOMContentLoaded', () => {
             transposeDownButton: " Tono -", transposeUpButton: " Tono +", exportTxtButton: "Exportar",
             previewTitle: "Vista Previa", settingsTitle: "Ajustes", languageLabel: "Idioma",
             darkModeLabel: "Modo Oscuro", regexLabel: "Expresión Regular para Acordes:",
-            regexHint: "Avanzado: Define el patrón para identificar acordes.",
+            regexHint: "Avanzado: Define el patrón matemático que el motor usa para identificar acordes. Modificar con precaución.",
             resetRegexButton: "Restablecer", saveSettingsButton: "Guardar",
             msgNothingToConvert: "Nada que convertir.", msgConversionSuccess: "Conversión exitosa.",
             msgCopied: "Copiado al portapapeles.", msgCleared: "Limpiado.", msgNothingToCopy: "Nada que copiar.",
@@ -291,8 +407,8 @@ document.addEventListener('DOMContentLoaded', () => {
             msgUndoDisabled: "No hay más acciones para deshacer.", msgNothingToTranspose: "Nada para transponer.",
             msgTransposed: (s) => `Transportado ${s > 0 ? '+' : ''}${s} semitonos.`,
             msgSettingsSaved: "Ajustes guardados.", msgRegexReset: "Expresión restablecida.",
-            msgOcrProcessing: "Analizando coordenadas X/Y de la imagen...",
-            msgOcrSuccess: "¡Conversión geométrica exitosa!",
+            msgOcrProcessing: "Analizando coordenadas y cifrado (Tolerancia Y=15px)...",
+            msgOcrSuccess: "¡Conversión geométrica y traducción exitosa!",
             msgOcrError: "Error al procesar la imagen con OCR."
         },
         en: {
@@ -303,7 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
             transposeDownButton: " Tone -", transposeUpButton: " Tone +", exportTxtButton: "Export",
             previewTitle: "Preview", settingsTitle: "Settings", languageLabel: "Language",
             darkModeLabel: "Dark Mode", regexLabel: "Chord Regular Expression:",
-            regexHint: "Advanced: Define the pattern to identify chords.",
+            regexHint: "Advanced: Define the mathematical pattern the engine uses to identify chords.",
             resetRegexButton: "Reset", saveSettingsButton: "Save",
             msgNothingToConvert: "Nothing to convert.", msgConversionSuccess: "Conversion successful.",
             msgCopied: "Copied to clipboard.", msgCleared: "Cleared.", msgNothingToCopy: "Nothing to copy.",
@@ -312,13 +428,13 @@ document.addEventListener('DOMContentLoaded', () => {
             msgUndoDisabled: "No more actions to undo.", msgNothingToTranspose: "Nothing to transpose.",
             msgTransposed: (s) => `Transposed ${s > 0 ? '+' : ''}${s} semitones.`,
             msgSettingsSaved: "Settings saved.", msgRegexReset: "Expression reset.",
-            msgOcrProcessing: "Analyzing image X/Y coordinates...",
-            msgOcrSuccess: "Geometric conversion successful!",
+            msgOcrProcessing: "Analyzing coordinates and chords (Y-tolerance 15px)...",
+            msgOcrSuccess: "Geometric conversion & translation successful!",
             msgOcrError: "Error processing the image with OCR."
         }
     };
     
-    // --- LÓGICA DE TEXTO TRADICIONAL (PASTE/TXT) ---
+    // --- LÓGICA DE TEXTO TRADICIONAL ---
     const getChordRegex = () => new RegExp(ACCORD_REGEX_STRING_GLOBAL, 'g');
     const extractChordsWithIndex = (line) => [...line.matchAll(getChordRegex())].map(m => ({ chord: m[0], index: m.index }));
 
@@ -327,14 +443,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const isPureChordLine = (line) => {
         if (!line.trim()) return false;
         let testLine = line.replace(/^(intro|solo|interludio|puente|coro|verso|verse|bridge)\s*[:\-]?\s*/i, '');
-        const chords = extractChordsWithIndex(testLine);
-        if (chords.length === 0) return false;
         
-        for (let i = chords.length - 1; i >= 0; i--) {
-            testLine = testLine.slice(0, chords[i].index) + ' '.repeat(chords[i].chord.length) + testLine.slice(chords[i].index + chords[i].chord.length);
+        let tempTest = testLine;
+        
+        const amRegex = getChordRegex();
+        const amChords = [...tempTest.matchAll(amRegex)];
+        for (let i = amChords.length - 1; i >= 0; i--) {
+            tempTest = tempTest.slice(0, amChords[i].index) + ' '.repeat(amChords[i][0].length) + tempTest.slice(amChords[i].index + amChords[i][0].length);
         }
-        
-        const leftovers = testLine.replace(/[\s|:\-\/()[\]{}]/g, '').replace(/^[xX\d]+$/g, '');
+
+        const spChords = [...tempTest.matchAll(SPANISH_CHORD_REGEX)];
+        for (let i = spChords.length - 1; i >= 0; i--) {
+            tempTest = tempTest.slice(0, spChords[i].index) + ' '.repeat(spChords[i][0].length) + tempTest.slice(spChords[i].index + spChords[i][0].length);
+        }
+
+        if (amChords.length === 0 && spChords.length === 0) return false;
+
+        // Toleramos puntos y comas porque la gente a veces escribe "MIm."
+        const leftovers = tempTest.replace(/[\s|:\-\/()[\]{}.,;]/g, '').replace(/^[xX\d]+$/g, '');
         return leftovers.length === 0;
     };
 
@@ -359,15 +485,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const { chord, index } = chords[i];
             let insertIndex = index;
             
-            // IMÁN PARA TEXTO MANUAL:
-            if (insertIndex > 0 && insertIndex < mergedLine.length && mergedLine[insertIndex] !== ' ') {
-                let wordStart = insertIndex;
-                while (wordStart > 0 && mergedLine[wordStart - 1] !== ' ') {
-                    wordStart--;
-                }
-                insertIndex = wordStart;
-            }
-            
             while (mergedLine.length < insertIndex) { mergedLine += ' '; }
             mergedLine = mergedLine.slice(0, insertIndex) + `[${chord.trim()}]` + mergedLine.slice(insertIndex);
         }
@@ -384,10 +501,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const output = [];
         
         for (let i = 0; i < lines.length; i++) {
-            const currentLine = lines[i];
+            let currentLine = lines[i];
             const nextLine = (i + 1 < lines.length) ? lines[i + 1] : null;
             
             if (isPureChordLine(currentLine)) {
+                // Traduce Español a Inglés antes de fusionar
+                currentLine = translateSpanishChordsInLineAligned(currentLine);
+
                 if (isMarkerLine(currentLine)) {
                     output.push(bracketUnbracketedChords(currentLine));
                 } else if (nextLine !== null && nextLine.trim() !== "" && !isPureChordLine(nextLine) && !isMarkerLine(nextLine)) {
@@ -432,9 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
         showMessage('msgTransposed', 'info', steps);
     };
 
-    // --- NUEVA LÓGICA OCR (GEOMETRÍA Y CORDENADAS X/Y) ---
+    // --- NUEVA LÓGICA OCR (GEOMETRÍA Y TRADUCCIÓN) ---
 
-    // 1. Escala y limpia la imagen en alto contraste
     const preprocessImage = (file) => {
         return new Promise((resolve, reject) => {
             const img = new Image();
@@ -477,86 +596,163 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // 2. Limpia los errores EXCLUSIVOS del OCR, sin dañar palabras reales
     const cleanWordOcr = (wordText) => {
         let cleaned = wordText.replace(/["”’‘_]/g, '').trim();
+        cleaned = cleaned.replace(/[^a-zA-Z0-9#b+\-/[\]().,;:|¿?¡!' áéíóúÁÉÍÓÚñÑ]/g, '');
+
         if (!cleaned) return "";
 
-        // Remover puntuación indeseada SÓLO si parece un acorde
-        if (/^[A-G][b#]?(m|maj|min|sus|dim|aug|add|M|\d)*[.,;:]+$/i.test(cleaned)) {
+        // ESCUDO: Proteger palabras españolas comunes
+        if (/^(al|el|del|y|en|un|una|que|por|con|su|tus|mis|las|los|de)$/i.test(cleaned)) return cleaned;
+
+        if (/^([A-G]|DO|RE|MI|FA|SOL|LA|SI)[b#]?(m|maj|min|sus|dim|aug|add|M|\d)*[.,;:]+$/i.test(cleaned)) {
             cleaned = cleaned.replace(/[.,;:]+$/, '');
         }
 
-        // Reparación de Falsos Sostenidos OCR (Ej: D/FX -> D/F#)
         cleaned = cleaned.replace(/\/([A-G])[xX+4ÍiIlL´\`\'’](?:\b|\s|$)/g, '/$1#');
         cleaned = cleaned.replace(/^([A-G])[xX+4ÍiIlL´\`\'’](m|maj|sus|dim|aug|add|\d|\b)/g, '$1#$2');
-        
         cleaned = cleaned.replace(/maj\??7/gi, 'maj7');
         cleaned = cleaned.replace(/^([A-G][#b]?m?)72\b/g, '$17');
+        
+        // Falsos OCR Español
+        cleaned = cleaned.replace(/\bS0L\b/gi, 'SOL');
+        cleaned = cleaned.replace(/\b5OL\b/gi, 'SOL');
+        cleaned = cleaned.replace(/\bD0\b/gi, 'DO');
+        cleaned = cleaned.replace(/\bM1m\b/gi, 'MIm');
+        cleaned = cleaned.replace(/\bMlm\b/gi, 'MIm');
+        cleaned = cleaned.replace(/\bMIM\b/gi, 'MIm');
+        cleaned = cleaned.replace(/\bFAX\b/gi, 'FA#');
+        // Vacuna EMm
+        cleaned = cleaned.replace(/\bEMm\b/gi, 'Em');
         
         if (cleaned === 'HG') cleaned = 'G';
         if (cleaned.toLowerCase() === 'b8bm7') cleaned = 'Bm7';
         if (cleaned === 'CD') cleaned = 'C D';
         if (cleaned === 'Fo' || cleaned === 'F.') cleaned = 'F';
         
-        // Quitar un solo corchete aleatorio de Tesseract
+        cleaned = cleaned.replace(/Fitm/g, 'F#m');
+        cleaned = cleaned.replace(/\bDE\b/g, 'D E');
+        cleaned = cleaned.replace(/E\/AA/g, 'E/A A');
+        
         cleaned = cleaned.replace(/^\[([A-G][#b]?(m|maj|min|sus|dim|aug|add|M|\d)*)\]?$/, '$1');
 
         return cleaned;
     };
 
-    // 3. LA MAGIA GEOMÉTRICA: Asigna [Acordes] a palabras por cercanía (Eje X)
     const processOcrDataGeometric = (data) => {
-        if (!data.lines || data.lines.length === 0) return data.text;
+        if (!data.words || data.words.length === 0) return data.text || "";
 
         const regex = getChordRegex();
-        // Función estricta para saber si una palabra individual es un acorde real
         const isActualChord = (text) => {
             const matches = [...text.matchAll(regex)];
             return matches.length > 0 && matches[0][0].length === text.length;
         };
 
-        // PASO A: Estructurar cada línea y limpiarla
-        let processedLines = data.lines.map(line => {
-            let words = [];
-            line.words.forEach(w => {
+        let validWords = [];
+        data.words.forEach(w => {
+            const text = w.text.trim(); 
+            if (text.length > 0) {
+                validWords.push({
+                    text: text,
+                    x0: w.bbox.x0,
+                    x1: w.bbox.x1,
+                    y0: w.bbox.y0,
+                    y1: w.bbox.y1,
+                    centerY: (w.bbox.y0 + w.bbox.y1) / 2
+                });
+            }
+        });
+        
+        if (validWords.length === 0) return "";
+        validWords.sort((a, b) => a.centerY - b.centerY || a.x0 - b.x0);
+
+        let lines = [];
+        let currentLine = [];
+        let currentCenterY = -1;
+
+        validWords.forEach(w => {
+            if (currentLine.length === 0) {
+                currentLine.push(w);
+                currentCenterY = w.centerY;
+            } else {
+                if (Math.abs(w.centerY - currentCenterY) <= 15) {
+                    currentLine.push(w);
+                    currentCenterY = currentLine.reduce((sum, cw) => sum + cw.centerY, 0) / currentLine.length;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = [w];
+                    currentCenterY = w.centerY;
+                }
+            }
+        });
+        if (currentLine.length > 0) lines.push(currentLine);
+
+        let charWidths = [];
+        validWords.forEach(w => {
+            if (/[a-zA-Z0-9]/.test(w.text)) {
+                charWidths.push((w.x1 - w.x0) / w.text.length);
+            }
+        });
+        charWidths.sort((a, b) => a - b);
+        const avgCharWidth = charWidths.length > 0 ? charWidths[Math.floor(charWidths.length / 2)] : 10;
+        const minX = Math.min(...validWords.map(w => w.x0));
+
+        let processedLines = lines.map(lineWords => {
+            lineWords.sort((a, b) => a.x0 - b.x0);
+            
+            let lineWordsProcessed = [];
+            lineWords.forEach(w => {
                 let cleanText = cleanWordOcr(w.text);
                 if (!cleanText) return;
                 
-                // Si la limpieza devolvió múltiples palabras ("C D"), las separamos
                 if (cleanText.includes(' ')) {
                     let parts = cleanText.split(' ');
                     parts.forEach((p, idx) => {
-                        if (p) words.push({ text: p, x0: w.bbox.x0 + (idx * 15) });
+                        if (p) lineWordsProcessed.push({ text: p, x0: w.x0 + (idx * avgCharWidth * 2) });
                     });
                 } else {
-                    words.push({ text: cleanText, x0: w.bbox.x0 });
+                    lineWordsProcessed.push({ text: cleanText, x0: w.x0 });
                 }
             });
-
-            let lineText = words.map(w => w.text).join(' ');
             
-            // Validar de qué tipo es la línea entera
+            let lineText = lineWordsProcessed.map(w => w.text).join(' ');
             let isMarker = /^(intro|solo|interludio|puente|coro|verso|verse|bridge)\b/i.test(lineText.trim());
             let testLine = lineText.replace(/^(intro|solo|interludio|puente|coro|verso|verse|bridge)\s*[:\-]?\s*/i, '');
             
             let isChord = false;
-            const chordsMatch = [...testLine.matchAll(regex)];
-            if (chordsMatch.length > 0) {
-                let tempTest = testLine;
-                for (let i = chordsMatch.length - 1; i >= 0; i--) {
-                    let c = chordsMatch[i];
-                    tempTest = tempTest.slice(0, c.index) + ' '.repeat(c[0].length) + tempTest.slice(c.index + c[0].length);
-                }
-                const leftovers = tempTest.replace(/[\s|:\-\/()[\]{}]/g, '').replace(/^[xX\d]+$/g, '');
+            let tempTest = testLine;
+            
+            const amChords = [...tempTest.matchAll(regex)];
+            for (let i = amChords.length - 1; i >= 0; i--) {
+                tempTest = tempTest.slice(0, amChords[i].index) + ' '.repeat(amChords[i][0].length) + tempTest.slice(amChords[i].index + amChords[i][0].length);
+            }
+            
+            const spChords = [...tempTest.matchAll(SPANISH_CHORD_REGEX)];
+            for (let i = spChords.length - 1; i >= 0; i--) {
+                tempTest = tempTest.slice(0, spChords[i].index) + ' '.repeat(spChords[i][0].length) + tempTest.slice(spChords[i].index + spChords[i][0].length);
+            }
+
+            if (amChords.length > 0 || spChords.length > 0) {
+                const leftovers = tempTest.replace(/[\s|:\-\/()[\]{}.,;]/g, '').replace(/^[xX\d]+$/g, '');
                 if (leftovers.length === 0) isChord = true;
             }
 
-            return { words, text: lineText, isMarkerLine: isMarker, isChordLine: isChord };
+            if (isChord) {
+                lineWordsProcessed.forEach(w => {
+                    w.text = w.text.replace(SPANISH_CHORD_REGEX, (match) => {
+                        return match.replace(/(DO|RE|MI|FA|SOL|LA|SI)/gi, (m) => SPANISH_CHORDS_DICT[m.toUpperCase()]);
+                    });
+                    // Vacuna final post-traduccion OCR
+                    w.text = w.text.replace(/\bEMm\b/g, 'Em');
+                });
+                lineText = lineWordsProcessed.map(w => w.text).join(' ');
+            }
+
+            return { words: lineWordsProcessed, text: lineText, isMarkerLine: isMarker, isChordLine: isChord };
         });
 
-        // PASO B: Combinar la coordenada X del acorde con la de la Letra
         let finalOutput = [];
+        
         for (let i = 0; i < processedLines.length; i++) {
             let currentLine = processedLines[i];
             if (currentLine.words.length === 0) continue;
@@ -564,74 +760,63 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentLine.isChordLine) {
                 let nextLine = (i + 1 < processedLines.length) ? processedLines[i + 1] : null;
 
-                // Si es un Intro o NO hay letra abajo: Solo formatea con corchetes en su sitio.
                 if (currentLine.isMarkerLine || !nextLine || nextLine.isChordLine || nextLine.isMarkerLine) {
-                    let formatted = currentLine.words.map(w => {
-                        if (isActualChord(w.text) && !/^(intro|solo|interludio|puente|coro|verso|verse|bridge)$/i.test(w.text)) {
-                            return `[${w.text}]`;
-                        }
-                        return w.text;
-                    }).join(' ');
-                    finalOutput.push(formatted);
-                } 
-                // Si la línea inferior SÍ es letra: Pegamos el acorde a la palabra más cercana.
-                else {
-                    let lyricWords = nextLine.words.map(w => ({ text: w.text, x0: w.x0, chordsAssigned: [] }));
-                    let floatingSymbolsBefore = [];
-                    let floatingSymbolsAfter = [];
-
-                    currentLine.words.forEach(chordWord => {
-                        // Es un Acorde Real
-                        if (isActualChord(chordWord.text) && !/^(intro|solo|interludio|puente|coro|verso|verse|bridge)$/i.test(chordWord.text)) {
-                            
-                            let closestLyric = null;
-                            let minDistance = Infinity;
-
-                            // Buscar la palabra de la letra con la posición en PÍXELES más cercana
-                            lyricWords.forEach(lw => {
-                                let dist = Math.abs(chordWord.x0 - lw.x0);
-                                if (dist < minDistance) {
-                                    minDistance = dist;
-                                    closestLyric = lw;
-                                }
-                            });
-
-                            if (closestLyric) {
-                                closestLyric.chordsAssigned.push(chordWord.text);
-                            }
-                        } 
-                        // No es un acorde (ej: un símbolo ||:)
-                        else {
-                            if (lyricWords.length > 0) {
-                                if (chordWord.x0 < lyricWords[0].x0) {
-                                    floatingSymbolsBefore.push(chordWord.text);
-                                } else {
-                                    floatingSymbolsAfter.push(chordWord.text);
-                                }
-                            }
+                    let lineStr = "";
+                    currentLine.words.forEach(w => {
+                        let targetIndex = Math.max(0, Math.round((w.x0 - minX) / avgCharWidth));
+                        if (targetIndex < lineStr.length) targetIndex = lineStr.length + 1; 
+                        while (lineStr.length < targetIndex) lineStr += " ";
+                        
+                        let bareChord = w.text.replace(/^[()[\]{}]+|[()[\]{}]+$/g, '');
+                        if (isActualChord(bareChord) && !/^(intro|solo|interludio|puente|coro|verso|verse|bridge)$/i.test(bareChord)) {
+                            lineStr += `[${bareChord}]`;
+                        } else {
+                            lineStr += w.text;
                         }
                     });
+                    finalOutput.push(lineStr);
+                } else {
+                    let lyricStr = "";
+                    
+                    nextLine.words.forEach(w => {
+                        let targetIndex = Math.max(0, Math.round((w.x0 - minX) / avgCharWidth));
+                        if (targetIndex < lyricStr.length) targetIndex = lyricStr.length + 1;
+                        while (lyricStr.length < targetIndex) lyricStr += " ";
+                        lyricStr += w.text;
+                    });
+                    
+                    let chordInsertions = [];
+                    currentLine.words.forEach(cw => {
+                        let cleanChordText = cw.text.replace(/^[()[\]{}]+|[()[\]{}]+$/g, '');
+                        let targetIndex = Math.max(0, Math.round((cw.x0 - minX) / avgCharWidth));
+                        
+                        if (isActualChord(cleanChordText) && !/^(intro|solo|interludio|puente|coro|verso|verse|bridge)$/i.test(cleanChordText)) {
+                            chordInsertions.push({ text: `[${cleanChordText}]`, index: targetIndex });
+                        } else {
+                            chordInsertions.push({ text: cw.text, index: targetIndex });
+                        }
+                    });
+                    
+                    chordInsertions.sort((a, b) => b.index - a.index);
+                    
+                    chordInsertions.forEach(ins => {
+                        let idx = ins.index;
+                        while (lyricStr.length < idx) lyricStr += " ";
+                        lyricStr = lyricStr.slice(0, idx) + ins.text + lyricStr.slice(idx);
+                    });
 
-                    // Construimos la línea de letra ya formateada con [Acorde]Palabra
-                    let mergedLineStr = lyricWords.map(lw => {
-                        let chordStr = lw.chordsAssigned.map(c => `[${c}]`).join('');
-                        return chordStr + lw.text;
-                    }).join(' ');
-
-                    // Agregamos barras (||:) si existían al principio o al final de los acordes
-                    if (floatingSymbolsBefore.length > 0) {
-                        mergedLineStr = floatingSymbolsBefore.join(' ') + ' ' + mergedLineStr;
-                    }
-                    if (floatingSymbolsAfter.length > 0) {
-                        mergedLineStr = mergedLineStr + ' ' + floatingSymbolsAfter.join(' ');
-                    }
-
-                    finalOutput.push(mergedLineStr);
-                    i++; // Saltamos la línea de letra porque ya la hemos combinado
+                    finalOutput.push(lyricStr);
+                    i++; 
                 }
             } else {
-                // Es letra normal o texto puro, no se toca.
-                finalOutput.push(currentLine.text);
+                let lineStr = "";
+                currentLine.words.forEach(w => {
+                    let targetIndex = Math.max(0, Math.round((w.x0 - minX) / avgCharWidth));
+                    if (targetIndex < lineStr.length) targetIndex = lineStr.length + 1;
+                    while (lineStr.length < targetIndex) lineStr += " ";
+                    lineStr += w.text;
+                });
+                finalOutput.push(lineStr);
             }
         }
 
@@ -659,7 +844,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const processConversion = (showSuccessMsg = true) => {
         if (!elements.inputTextbox.value.trim()) { if (showSuccessMsg) showMessage('msgNothingToConvert', 'warning'); return; }
         saveStateForUndo();
-        // Ejecutamos convertirAWorshipTools, esto permite que si alguien edita algo manual en Entrada, se repare en la Salida
         const converted = convertirAWorshipTools(elements.inputTextbox.value);
         updateUIFromState({ output: converted });
         if (showSuccessMsg) showMessage('msgConversionSuccess', 'success');
@@ -775,7 +959,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = '';
     });
 
-    // --- MANEJO DEL BOTÓN IMAGEN ---
     elements.ocrButton.addEventListener('click', () => elements.imageInput.click());
     
     elements.imageInput.addEventListener('change', async (e) => {
@@ -791,7 +974,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const processedImageDataUrl = await preprocessImage(file);
             
-            // Solución de seguridad (CORS) para Archivos Locales:
             const worker = await Tesseract.createWorker('spa', 1, {
                 workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js',
                 langPath: 'https://tessdata.projectnaptha.com/4.0.0',
@@ -854,7 +1036,6 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.transposeUpButton.addEventListener('click', () => transposeSong(1));
     elements.transposeDownButton.addEventListener('click', () => transposeSong(-1));
     
-    // Configuración Modal
     elements.settingsButton.addEventListener('click', () => { elements.settingsModal.style.display = 'flex'; });
     elements.closeModalButton.addEventListener('click', () => { elements.settingsModal.style.display = 'none'; });
     window.addEventListener('click', (e) => { if (e.target == elements.settingsModal) elements.settingsModal.style.display = 'none'; });
