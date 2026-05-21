@@ -65,16 +65,9 @@
     transition: background-color 0.4s ease, color 0.4s ease;
   }
 
-  /* Animación de Orbes Neón (Efecto Cristal) */
   body::before, body::after {
-    content: '';
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(90px);
-    z-index: -1;
-    opacity: 0.7;
-    animation: float 20s infinite alternate ease-in-out;
-    transition: background-color 0.4s ease;
+    content: ''; position: fixed; border-radius: 50%; filter: blur(90px); z-index: -1; opacity: 0.7;
+    animation: float 20s infinite alternate ease-in-out; transition: background-color 0.4s ease;
   }
   body::before { width: 450px; height: 450px; background: var(--blob-1); top: -100px; left: -100px; }
   body::after { width: 550px; height: 550px; background: var(--blob-2); bottom: -150px; right: -150px; animation-delay: -10s; }
@@ -85,27 +78,13 @@
   }
   
   body.dark-mode {
-    --bg-light: var(--dark-bg);
-    --text-light: var(--dark-text);
-    --text-muted-light: var(--dark-text-muted);
-    --blob-1: var(--dark-blob-1);
-    --blob-2: var(--dark-blob-2);
-    --glass-bg: var(--dark-glass-bg);
-    --glass-border: var(--dark-glass-border);
-    --glass-input: var(--dark-glass-input);
+    --bg-light: var(--dark-bg); --text-light: var(--dark-text); --text-muted-light: var(--dark-text-muted);
+    --blob-1: var(--dark-blob-1); --blob-2: var(--dark-blob-2);
+    --glass-bg: var(--dark-glass-bg); --glass-border: var(--dark-glass-border); --glass-input: var(--dark-glass-input);
   }
 
-  .header {
-    max-width: 1400px; margin: 0 auto 25px auto; 
-    display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px;
-  }
-  
-  h1 { 
-    font-size: 3.5em; font-weight: 900; margin: 0; letter-spacing: -0.03em;
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent;
-  }
-  
+  .header { max-width: 1400px; margin: 0 auto 25px auto; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 8px; }
+  h1 { font-size: 3.5em; font-weight: 900; margin: 0; letter-spacing: -0.03em; background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; }
   .tagline { font-size: 1.15em; font-weight: 400; color: var(--text-muted-light); margin: 0 0 10px 0; }
 
   .header-controls { 
@@ -113,7 +92,6 @@
     background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     padding: 10px 20px; border-radius: 30px; border: 1px solid var(--glass-border); box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   }
-  
   .auto-convert-group { display: flex; align-items: center; gap: 10px; font-size: 0.95em; font-weight: 600; color: var(--text-light); }
   .switch { position: relative; display: inline-block; width: 46px; height: 26px; }
   .switch input { display: none; }
@@ -148,9 +126,9 @@
     border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; color: white;
     transition: all 0.2s ease; background-size: 200% auto; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   }
-  button:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 8px rgba(0,0,0,0.1); }
-  button:active { transform: translateY(1px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-  button:disabled { background-image: none !important; background-color: #9ca3af !important; cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.7; }
+  button:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 8px rgba(0,0,0,0.1); }
+  button:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
   #convert-button { background-image: linear-gradient(to right, var(--gradient-start) 0%, var(--primary-color) 51%, var(--gradient-start) 100%); }
   #copy-button { background-color: var(--success-color); }
@@ -170,11 +148,7 @@
   }
   .preview { font-family: var(--font-mono); white-space: pre-wrap; line-height: 1.7; font-size: 1.05em; position: relative;}
   
-  .preview .chord { 
-      font-weight: 700; color: var(--primary-color); cursor: pointer; 
-      text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 4px;
-      transition: color 0.2s ease;
-  }
+  .preview .chord { font-weight: 700; color: var(--primary-color); cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 4px; transition: color 0.2s ease; }
   .preview .chord:hover { color: var(--gradient-end); }
   
   .chord-tooltip {
@@ -185,13 +159,7 @@
   }
   .chord-tooltip.visible { opacity: 1; transform: translateY(0); }
   
-  .footer-text {
-      text-align: center;
-      font-size: 0.9em;
-      font-weight: 600;
-      color: var(--text-muted-light);
-      margin: 30px 0 10px 0;
-  }
+  .footer-text { text-align: center; font-size: 0.9em; font-weight: 600; color: var(--text-muted-light); margin: 30px 0 10px 0; }
 
   #status-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px); opacity: 0; min-width: 300px; padding: 16px 25px; font-size: 1.1em; font-weight: 600; text-align: center; border-radius: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); color: white; z-index: 2000; display: flex; align-items: center; justify-content: center; gap: 10px; }
   #status-message.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -200,8 +168,8 @@
   #status-message.warning { background-color: var(--warning-color); color: #fff; }
   #status-message.error { background-color: var(--error-color); }
   
-  .modal { display: none; position: fixed; z-index: 2000; inset: 0; overflow: auto; background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
-  .modal-content { background: var(--glass-bg); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); color: var(--text-light); margin: auto; padding: 35px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); width: 90%; max-width: 500px; position: relative; }
+  .modal { display: none; position: fixed; z-index: 2000; inset: 0; overflow: auto; background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); justify-content: center; align-items: center; padding: 20px 0;}
+  .modal-content { background: var(--glass-bg); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); color: var(--text-light); margin: auto; padding: 35px; border-radius: var(--border-radius); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); width: 90%; max-width: 600px; position: relative; }
   .close-button { color: var(--text-muted-light); position: absolute; top: 15px; right: 25px; font-size: 28px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
   .close-button:hover { color: var(--error-color); }
   .modal-content h3 { color: var(--primary-color); border-bottom-color: var(--glass-border); margin-top: 0; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 25px; font-size: 1.6em; font-weight: 800;}
@@ -209,30 +177,23 @@
   .modal-control-group { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 15px; background-color: var(--glass-input); padding: 15px; border-radius: 10px; border: 1px solid var(--glass-border); }
   .modal-control-group label { margin-bottom: 0; font-weight: 600;}
   .modal-content label { display: block; margin-bottom: 8px; font-weight: 600; }
-  .modal-content input[type="text"] { width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 10px; border: 1px solid var(--glass-border); border-radius: 8px; font-family: var(--font-mono); font-size: 0.95em; background-color: var(--glass-input); color: var(--text-light); }
+  .modal-content input[type="text"], .modal-content textarea { width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 10px; border: 1px solid var(--glass-border); border-radius: 8px; font-family: var(--font-mono); font-size: 0.95em; background-color: var(--glass-input); color: var(--text-light); }
+  .modal-content textarea { height: 100px; resize: vertical; }
   #language-select-modal { background-color: var(--glass-input); color: var(--text-light); border: 1px solid var(--glass-border); border-radius: 8px; padding: 10px 15px; font-family: var(--font-primary); font-weight: 600; outline: none;}
   .modal-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-top: 30px; }
   #save-settings-button { background-image: linear-gradient(to right, var(--gradient-start) 0%, var(--primary-color) 51%, var(--gradient-start) 100%); }
   #reset-regex-button { background-color: #64748b; }
 
-  /* RESPONSIVE DESIGN: Fix para Teléfonos Móviles */
   @media (max-width: 900px) {
-    body { padding: 15px; } 
-    h1 { font-size: 2.2em; }
+    body { padding: 15px; } h1 { font-size: 2.2em; }
     .container { flex-direction: column !important; margin-top: 0;}
     textarea { height: 40vh; }
     .header-controls { flex-wrap: wrap; }
   }
 
   @media (max-width: 600px) {
-    /* En teléfonos, partimos la caja de 3 botones en 2 columnas y el botón deshacer ocupa toda la línea inferior */
-    .button-row-input { 
-        grid-template-columns: 1fr 1fr; 
-        gap: 10px;
-    }
-    #undo-button { 
-        grid-column: span 2; 
-    }
+    .button-row-input { grid-template-columns: 1fr 1fr; gap: 10px; }
+    #undo-button { grid-column: span 2; }
   }
   </style>
 </head>
@@ -261,7 +222,7 @@
       <div class="button-group">
         <button id="convert-button" title="Atajo: Ctrl + Enter"><i class="fas fa-magic-wand-sparkles"></i><span data-i18n="convertButton">Convertir</span></button>
         <div class="button-row-input">
-            <button id="load-file-button" title="Atajo: Ctrl + L"><i class="fas fa-folder-open"></i><span data-i18n="loadFileButton">Cargar</span></button>
+            <button id="load-file-button" title="Cargar archivo de texto"><i class="fas fa-folder-open"></i><span data-i18n="loadFileButton">Cargar</span></button>
             <button id="ocr-button" title="Extraer texto de imagen"><i class="fas fa-camera"></i><span data-i18n="ocrButton">Imagen</span></button>
             <button id="undo-button" title="Deshacer (Ctrl + Z)" disabled><i class="fas fa-undo"></i><span data-i18n="undoButton">Deshacer</span></button>
         </div>
@@ -288,6 +249,7 @@
     <div id="preview-content" class="preview"></div>
   </div>
 
+  <!-- MODAL DE AJUSTES -->
   <div id="settings-modal" class="modal">
     <div class="modal-content">
       <span class="close-button">×</span>
@@ -305,10 +267,17 @@
           <label class="switch"><input type="checkbox" id="dark-mode-toggle-modal"><span class="slider"></span></label>
         </div>
       </div>
+      
+      <div class="modal-section">
+        <label for="custom-ocr-dict" style="color: var(--primary-color);">Diccionario de Corrección Universal:</label>
+        <textarea id="custom-ocr-dict" placeholder="A/CH = A/C#&#10;Dadd? = Dadd2&#10;F/Af = F#/A#"></textarea>
+        <p style="font-size: 0.85em; color: var(--text-muted-light); margin-top: -5px;">Aplica para Texto y OCR. Formato: <b>Error = Corrección</b> (Uno por línea).</p>
+      </div>
+
       <div class="modal-section">
         <label for="chord-regex-input" data-i18n="regexLabel">Expresión Regular para Acordes:</label>
         <input type="text" id="chord-regex-input" />
-        <p style="font-size: 0.85em; color: var(--text-muted-light); margin-top: -5px;" data-i18n="regexHint">Avanzado: Define el patrón matemático que el motor usa para identificar acordes. Modificar con precaución.</p>
+        <p style="font-size: 0.85em; color: var(--text-muted-light); margin-top: -5px;" data-i18n="regexHint">Avanzado: Define el patrón matemático para identificar acordes.</p>
         <div id="regex-error-message" style="color: var(--error-color); font-size: 0.9em; margin-top: 5px; display: none;"></div>
       </div>
       <div class="modal-buttons">
@@ -342,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeModalButton: getEl('settings-modal').querySelector('.close-button'),
         darkModeToggleModal: getEl('dark-mode-toggle-modal'),
         languageSelectModal: getEl('language-select-modal'), chordRegexInput: getEl('chord-regex-input'),
+        customOcrDict: getEl('custom-ocr-dict'), 
         saveSettingsButton: getEl('save-settings-button'), resetRegexButton: getEl('reset-regex-button'),
         regexErrorMessage: getEl('regex-error-message')
     };
@@ -350,6 +320,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const DEFAULT_CHORD_REGEX = '\\b([A-G](?:#|b)?(?:m|maj|min|sus|dim|aug|add|M|\\d)*(?:\\s*\\/\\s*[A-G](?:#|b)?)?)(?!\\w)';
     let undoStack = [];
     const MAX_UNDO_STATES = 20;
+
+    // --- FUNCIÓN DEL DICCIONARIO UNIVERSAL (APLICA A TEXTO MANUAL Y OCR) ---
+    const applyCustomDictionary = (text) => {
+        let result = text;
+        const customDictStr = localStorage.getItem('customOcrDict') || '';
+        if (customDictStr) {
+            const lines = customDictStr.split('\n');
+            lines.forEach(line => {
+                const parts = line.split('=');
+                if (parts.length === 2) {
+                    const err = parts[0].trim();
+                    const corr = parts[1].trim();
+                    if (err && corr) {
+                        // Split/Join reemplaza globalmente sin importar caracteres especiales (como / o ?)
+                        result = result.split(err).join(corr);
+                    }
+                }
+            });
+        }
+        return result;
+    };
 
     const SPANISH_CHORDS_DICT = { 'DO':'C', 'RE':'D', 'MI':'E', 'FA':'F', 'SOL':'G', 'LA':'A', 'SI':'B' };
     const SPANISH_CHORD_REGEX = /\b(DO|RE|MI|FA|SOL|LA|SI)(?:#|b)?(?:m|maj|min|sus|dim|aug|add|M|\d)*(?:\/(?:DO|RE|MI|FA|SOL|LA|SI)(?:#|b)?)?(?!\w)/gi;
@@ -375,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
             transposeDownButton: " Tono -", transposeUpButton: " Tono +", exportPdfButton: "Exportar PDF",
             previewTitle: "Vista Previa", settingsTitle: "Ajustes", languageLabel: "Idioma",
             darkModeLabel: "Modo Oscuro", regexLabel: "Expresión Regular para Acordes:",
-            regexHint: "Avanzado: Define el patrón matemático que el motor usa para identificar acordes. Modificar con precaución.",
+            regexHint: "Avanzado: Define el patrón matemático para identificar acordes.",
             resetRegexButton: "Restablecer", saveSettingsButton: "Guardar",
             msgNothingToConvert: "Nada que convertir.", msgConversionSuccess: "Conversión exitosa.",
             msgCopied: "Copiado al portapapeles.", msgCleared: "Limpiado.", msgNothingToCopy: "Nada que copiar.",
@@ -383,8 +374,8 @@ document.addEventListener('DOMContentLoaded', () => {
             msgExportSuccess: "PDF generado con éxito.", msgUndoSuccess: "Acción deshecha.",
             msgUndoDisabled: "No hay más acciones para deshacer.", msgNothingToTranspose: "Nada para transponer.",
             msgTransposed: (s) => `Transportado ${s > 0 ? '+' : ''}${s} semitonos.`,
-            msgSettingsSaved: "Ajustes guardados.", msgRegexReset: "Expresión restablecida.",
-            msgOcrProcessing: "Analizando coordenadas y cifrado (Tolerancia Y=15px)...",
+            msgSettingsSaved: "Ajustes guardados.", msgRegexReset: "Expresiones restablecidas.",
+            msgOcrProcessing: "Analizando imagen y aplicando diccionarios...",
             msgOcrSuccess: "¡Conversión geométrica y traducción exitosa!",
             msgOcrError: "Error al procesar la imagen con OCR."
         },
@@ -396,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
             transposeDownButton: " Tone -", transposeUpButton: " Tone +", exportPdfButton: "Export PDF",
             previewTitle: "Preview", settingsTitle: "Settings", languageLabel: "Language",
             darkModeLabel: "Dark Mode", regexLabel: "Chord Regular Expression:",
-            regexHint: "Advanced: Define the mathematical pattern the engine uses to identify chords.",
+            regexHint: "Advanced: Define the mathematical pattern to identify chords.",
             resetRegexButton: "Reset", saveSettingsButton: "Save",
             msgNothingToConvert: "Nothing to convert.", msgConversionSuccess: "Conversion successful.",
             msgCopied: "Copied to clipboard.", msgCleared: "Cleared.", msgNothingToCopy: "Nothing to copy.",
@@ -404,8 +395,8 @@ document.addEventListener('DOMContentLoaded', () => {
             msgExportSuccess: "PDF generated successfully.", msgUndoSuccess: "Action undone.",
             msgUndoDisabled: "No more actions to undo.", msgNothingToTranspose: "Nothing to transpose.",
             msgTransposed: (s) => `Transposed ${s > 0 ? '+' : ''}${s} semitones.`,
-            msgSettingsSaved: "Settings saved.", msgRegexReset: "Expression reset.",
-            msgOcrProcessing: "Analyzing coordinates and chords (Y-tolerance 15px)...",
+            msgSettingsSaved: "Settings saved.", msgRegexReset: "Expressions reset.",
+            msgOcrProcessing: "Analyzing image and applying dictionaries...",
             msgOcrSuccess: "Geometric conversion & translation successful!",
             msgOcrError: "Error processing the image with OCR."
         }
@@ -414,11 +405,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const getChordRegex = () => new RegExp(ACCORD_REGEX_STRING_GLOBAL, 'g');
     const extractChordsWithIndex = (line) => [...line.matchAll(getChordRegex())].map(m => ({ chord: m[0], index: m.index }));
 
-    const isMarkerLine = (line) => /^(intro|solo|interludio|puente|coro|verso|verse|bridge)\b/i.test(line.trim());
+    // Se añadió "introduccion" e "introducción" al regex de detección
+    const isMarkerLine = (line) => /^(intro(ducci[oó]n)?|solo|interludio|puente|coro|verso|verse|bridge)\b/i.test(line.trim());
 
     const isPureChordLine = (line) => {
         if (!line.trim()) return false;
-        let testLine = line.replace(/^(intro|solo|interludio|puente|coro|verso|verse|bridge)\s*[:\-]?\s*/i, '');
+        let testLine = line.replace(/^(intro(ducci[oó]n)?|solo|interludio|puente|coro|verso|verse|bridge)\s*[:\-]?\s*/i, '');
         let tempTest = testLine;
         
         const amRegex = getChordRegex();
@@ -434,7 +426,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (amChords.length === 0 && spChords.length === 0) return false;
 
-        const leftovers = tempTest.replace(/[\s|:\-\/()[\]{}.,;]/g, '').replace(/^[xX\d]+$/g, '');
+        // Se eliminan los multiplicadores tipo "4x" o "x2"
+        const leftovers = tempTest.replace(/[\s|:\-\/()[\]{}.,;]/g, '').replace(/\b\d+[xX]\b/gi, '').replace(/^[xX\d]+$/g, '');
         return leftovers.length === 0;
     };
 
@@ -470,8 +463,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const convertirAWorshipTools = (text) => {
-        const preprocessedText = convertFromChordPro(text);
-        const lines = preprocessedText.replace(/\r\n/g, '\n').split('\n');
+        // APLICA DICCIONARIO PERSONALIZADO (Copiar/Pegar)
+        let processedText = applyCustomDictionary(text);
+        
+        processedText = convertFromChordPro(processedText);
+        const lines = processedText.replace(/\r\n/g, '\n').split('\n');
         const output = [];
         
         for (let i = 0; i < lines.length; i++) {
@@ -551,7 +547,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let startFret = (maxFret > 4) ? minFret : 1;
         
         let svg = `<svg width="100" height="130" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">`;
-        
         for(let i=0; i<=4; i++) {
             let y = 35 + (i * 20);
             let strokeWidth = (i===0 && startFret===1) ? 4 : 1.5;
@@ -562,7 +557,6 @@ document.addEventListener('DOMContentLoaded', () => {
             svg += `<line x1="${x}" y1="35" x2="${x}" y2="115" stroke="currentColor" stroke-width="1.5" />`;
         }
         if (startFret > 1) svg += `<text x="5" y="50" font-family="monospace" font-size="12" fill="currentColor">${startFret}fr</text>`;
-        
         for(let i=0; i<6; i++) {
             let x = 20 + (i * 12);
             let val = frets[i];
@@ -643,6 +637,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cleanWordOcr = (wordText) => {
         let cleaned = wordText.replace(/["”’‘_]/g, '').trim();
+        
+        // APLICA DICCIONARIO PERSONALIZADO (OCR)
+        cleaned = applyCustomDictionary(cleaned);
+        
         cleaned = cleaned.replace(/[^a-zA-Z0-9#b+\-/[\]().,;:|¿?¡!' áéíóúÁÉÍÓÚñÑ]/g, '');
         if (!cleaned) return "";
 
@@ -651,10 +649,18 @@ document.addEventListener('DOMContentLoaded', () => {
             cleaned = cleaned.replace(/[.,;:]+$/, '');
         }
 
+        // Vacunas específicas OCR
+        cleaned = cleaned.replace(/\bGa\b/g, 'G');
+        cleaned = cleaned.replace(/\bCa\b/g, 'C');
+        cleaned = cleaned.replace(/\bFG\b/g, 'F G');
+        cleaned = cleaned.replace(/\bCG\b/g, 'C G');
+
         cleaned = cleaned.replace(/\/([A-G])[xX+4ÍiIlL´\`\'’](?:\b|\s|$)/g, '/$1#');
         cleaned = cleaned.replace(/^([A-G])[xX+4ÍiIlL´\`\'’](m|maj|sus|dim|aug|add|\d|\b)/g, '$1#$2');
         cleaned = cleaned.replace(/maj\??7/gi, 'maj7');
         cleaned = cleaned.replace(/^([A-G][#b]?m?)72\b/g, '$17');
+        cleaned = cleaned.replace(/CH\b/g, 'C#');
+        cleaned = cleaned.replace(/Af\b/g, 'A#');
         
         cleaned = cleaned.replace(/\bS0L\b/gi, 'SOL');
         cleaned = cleaned.replace(/\b5OL\b/gi, 'SOL');
@@ -828,6 +834,8 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('autoConvert', elements.autoConvertToggle.checked);
             localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
             localStorage.setItem('language', elements.languageSelectModal.value);
+            localStorage.setItem('customOcrDict', elements.customOcrDict.value);
+            
             setLanguage(elements.languageSelectModal.value);
             showMessage('msgSettingsSaved', 'success');
             elements.settingsModal.style.display = 'none';
@@ -852,6 +860,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       ACCORD_REGEX_STRING_GLOBAL = localStorage.getItem('chordRegex') || DEFAULT_CHORD_REGEX;
       elements.chordRegexInput.value = ACCORD_REGEX_STRING_GLOBAL;
+      
+      elements.customOcrDict.value = localStorage.getItem('customOcrDict') || '';
       
       const lastInput = localStorage.getItem('songChordWeaverInput') || '';
       updateUIFromState({ input: lastInput, output: '' }, false);
