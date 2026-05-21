@@ -159,9 +159,30 @@
   }
   .chord-tooltip.visible { opacity: 1; transform: translateY(0); }
   
+  /* Botón de Ayuda Flotante */
+  .floating-help {
+      position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: white; font-size: 1.8em; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); border: none; outline: none; padding: 0;
+  }
+  .floating-help:hover { transform: scale(1.15) rotate(10deg); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+
+  /* Elementos del manual */
+  .help-scroll { max-height: 50vh; overflow-y: auto; padding-right: 15px; margin-bottom: 20px; }
+  .help-scroll::-webkit-scrollbar { width: 8px; }
+  .help-scroll::-webkit-scrollbar-track { background: var(--glass-input); border-radius: 4px; }
+  .help-scroll::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
+  kbd {
+      background-color: var(--glass-input); border: 1px solid var(--glass-border);
+      border-radius: 4px; padding: 2px 6px; font-family: var(--font-mono);
+      font-size: 0.85em; color: var(--primary-color); box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+  }
+
   .footer-text { text-align: center; font-size: 0.9em; font-weight: 600; color: var(--text-muted-light); margin: 30px 0 10px 0; }
 
-  #status-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px); opacity: 0; min-width: 300px; padding: 16px 25px; font-size: 1.1em; font-weight: 600; text-align: center; border-radius: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); color: white; z-index: 2000; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  #status-message { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(150px); opacity: 0; min-width: 300px; padding: 16px 25px; font-size: 1.1em; font-weight: 600; text-align: center; border-radius: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); color: white; z-index: 3000; display: flex; align-items: center; justify-content: center; gap: 10px; }
   #status-message.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
   #status-message.success { background-color: var(--success-color); }
   #status-message.info { background-color: var(--info-color); }
@@ -249,6 +270,56 @@
     <div id="preview-content" class="preview"></div>
   </div>
 
+  <!-- Botón de Ayuda Flotante -->
+  <button id="help-button" class="floating-help" title="Manual de Uso">
+    <i class="fas fa-question"></i>
+  </button>
+
+  <!-- Modal del Manual de Usuario -->
+  <div id="help-modal" class="modal">
+    <div class="modal-content" style="max-width: 700px;">
+      <span class="close-button" id="close-help-button">×</span>
+      <h3 data-i18n="helpTitle">Manual de Usuario 📖</h3>
+      
+      <p style="font-size: 1.05em; line-height: 1.6; margin-bottom: 20px;" data-i18n="helpDesc">
+        <b>SongChord Weaver Pro</b> es una herramienta diseñada para ayudar a los ministerios de alabanza a transformar rápidamente letras y acordes de cualquier formato (como LaCuerda.net, PDFs o cifrado español) al formato exacto requerido por WorshipTools, ahorrando horas de edición manual. Alinea los acordes con precisión milimétrica y corrige errores de forma inteligente.
+      </p>
+
+      <div class="help-scroll">
+          <h4 style="color: var(--primary-color); margin-bottom: 10px;">Entrada:</h4>
+          <ul style="line-height: 1.8; color: var(--text-light); padding-left: 20px;">
+              <li><b><i class="fas fa-magic-wand-sparkles"></i> Convertir:</b> <span data-i18n="helpConvert">Convierte el texto de Entrada al formato de WorshipTools.</span></li>
+              <li><b><i class="fas fa-folder-open"></i> Cargar:</b> <span data-i18n="helpLoad">Carga un archivo de texto (.txt) desde tu PC o celular.</span></li>
+              <li><b><i class="fas fa-camera"></i> Imagen:</b> <span data-i18n="helpImage">Extrae letras y acordes desde una captura de pantalla (OCR) respetando su posición.</span></li>
+              <li><b><i class="fas fa-undo"></i> Deshacer:</b> <span data-i18n="helpUndo">Deshace la última conversión o acción.</span></li>
+              <li><b><i class="fas fa-eraser"></i> Limpiar:</b> <span data-i18n="helpClear">Limpia ambas cajas de texto.</span></li>
+          </ul>
+
+          <h4 style="color: var(--primary-color); margin-bottom: 10px; margin-top: 20px;">Salida:</h4>
+          <ul style="line-height: 1.8; color: var(--text-light); padding-left: 20px;">
+              <li><b><i class="fas fa-copy"></i> Copiar:</b> <span data-i18n="helpCopy">Copia el resultado listo para pegar en Planning.</span></li>
+              <li><b><i class="fas fa-minus"></i> / <i class="fas fa-plus"></i> Transponer:</b> <span data-i18n="helpTranspose">Sube o baja el tono de la canción automáticamente.</span></li>
+              <li><b><i class="fas fa-file-pdf"></i> Exportar PDF:</b> <span data-i18n="helpPdf">Exporta el resultado a PDF manteniendo la alineación para la banda.</span></li>
+          </ul>
+          
+          <h4 style="color: var(--primary-color); margin-bottom: 10px; margin-top: 20px;">Atajos de Teclado Reales:</h4>
+          <ul style="line-height: 1.8; color: var(--text-light); padding-left: 20px; font-family: var(--font-mono); font-size: 0.9em; list-style: none;">
+              <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> : Convertir</li>
+              <li><kbd>Ctrl</kbd> + <kbd>L</kbd> : Cargar Archivo</li>
+              <li><kbd>Ctrl</kbd> + <kbd>Z</kbd> : Deshacer Acción</li>
+              <li><kbd>Ctrl</kbd> + <kbd>E</kbd> : Limpiar Todo</li>
+              <li><kbd>Ctrl</kbd> + <kbd>C</kbd> : Copiar Resultado (Si no seleccionas texto manual)</li>
+              <li><kbd>Ctrl</kbd> + <kbd>P</kbd> : Exportar a PDF</li>
+              <li><kbd>Ctrl</kbd> + <kbd>↑</kbd> / <kbd>↓</kbd> : Transponer Tono</li>
+          </ul>
+      </div>
+
+      <div class="modal-buttons">
+        <button id="close-help-btn-bottom" style="background-image: linear-gradient(to right, var(--gradient-start) 0%, var(--primary-color) 51%, var(--gradient-start) 100%); width: 100%;" data-i18n="helpUnderstood">¡Entendido!</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL DE AJUSTES -->
   <div id="settings-modal" class="modal">
     <div class="modal-content">
@@ -309,6 +380,8 @@ document.addEventListener('DOMContentLoaded', () => {
         previewContainer: getEl('preview-container'), previewContent: getEl('preview-content'),
         settingsButton: getEl('settings-button'), settingsModal: getEl('settings-modal'),
         closeModalButton: getEl('settings-modal').querySelector('.close-button'),
+        helpButton: getEl('help-button'), helpModal: getEl('help-modal'),
+        closeHelpButton: getEl('close-help-button'), closeHelpBtnBottom: getEl('close-help-btn-bottom'),
         darkModeToggleModal: getEl('dark-mode-toggle-modal'),
         languageSelectModal: getEl('language-select-modal'), chordRegexInput: getEl('chord-regex-input'),
         customOcrDict: getEl('custom-ocr-dict'), 
@@ -321,7 +394,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let undoStack = [];
     const MAX_UNDO_STATES = 20;
 
-    // --- FUNCIÓN DEL DICCIONARIO UNIVERSAL (APLICA A TEXTO MANUAL Y OCR) ---
     const applyCustomDictionary = (text) => {
         let result = text;
         const customDictStr = localStorage.getItem('customOcrDict') || '';
@@ -333,7 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const err = parts[0].trim();
                     const corr = parts[1].trim();
                     if (err && corr) {
-                        // Split/Join reemplaza globalmente sin importar caracteres especiales (como / o ?)
                         result = result.split(err).join(corr);
                     }
                 }
@@ -377,7 +448,18 @@ document.addEventListener('DOMContentLoaded', () => {
             msgSettingsSaved: "Ajustes guardados.", msgRegexReset: "Expresiones restablecidas.",
             msgOcrProcessing: "Analizando imagen y aplicando diccionarios...",
             msgOcrSuccess: "¡Conversión geométrica y traducción exitosa!",
-            msgOcrError: "Error al procesar la imagen con OCR."
+            msgOcrError: "Error al procesar la imagen con OCR.",
+            helpTitle: "Manual de Usuario 📖",
+            helpDesc: "SongChord Weaver Pro es una herramienta diseñada para ayudar a los ministerios de alabanza a transformar rápidamente letras y acordes de cualquier formato (como LaCuerda.net, PDFs o cifrado español) al formato exacto requerido por WorshipTools, ahorrando horas de edición manual. Alinea los acordes con precisión milimétrica y corrige errores de forma inteligente.",
+            helpConvert: "Convierte el texto de Entrada al formato de WorshipTools.",
+            helpLoad: "Carga un archivo de texto (.txt) desde tu PC o celular.",
+            helpImage: "Extrae letras y acordes desde una captura de pantalla (OCR) respetando su posición.",
+            helpUndo: "Deshace la última conversión o acción.",
+            helpClear: "Limpia ambas cajas de texto.",
+            helpCopy: "Copia el resultado listo para pegar en Planning.",
+            helpPdf: "Exporta el resultado a PDF manteniendo la alineación para la banda.",
+            helpTranspose: "Sube o baja el tono de la canción automáticamente.",
+            helpUnderstood: "¡Entendido!"
         },
         en: {
             appTitle: "SongChord Weaver Pro", appTagline: "Transform your lyrics with chords for WorshipTools.",
@@ -398,14 +480,24 @@ document.addEventListener('DOMContentLoaded', () => {
             msgSettingsSaved: "Settings saved.", msgRegexReset: "Expressions reset.",
             msgOcrProcessing: "Analyzing image and applying dictionaries...",
             msgOcrSuccess: "Geometric conversion & translation successful!",
-            msgOcrError: "Error processing the image with OCR."
+            msgOcrError: "Error processing the image with OCR.",
+            helpTitle: "User Manual 📖",
+            helpDesc: "<b>SongChord Weaver Pro</b> is a tool designed to help worship ministries quickly transform lyrics and chords from any format (like LaCuerda.net, PDFs, or Spanish chords) to the exact format required by WorshipTools, saving hours of manual editing. It aligns chords with millimeter precision and intelligently corrects errors.",
+            helpConvert: "Converts the Input text to WorshipTools format.",
+            helpLoad: "Loads a text file (.txt) from your PC or mobile.",
+            helpImage: "Extracts lyrics and chords from a screenshot (OCR) keeping their position.",
+            helpUndo: "Undoes the last conversion or action.",
+            helpClear: "Clears both text boxes.",
+            helpCopy: "Copies the result ready to paste into Planning.",
+            helpPdf: "Exports the result to a PDF maintaining alignment for the band.",
+            helpTranspose: "Automatically transposes the song key up or down.",
+            helpUnderstood: "Got it!"
         }
     };
     
     const getChordRegex = () => new RegExp(ACCORD_REGEX_STRING_GLOBAL, 'g');
     const extractChordsWithIndex = (line) => [...line.matchAll(getChordRegex())].map(m => ({ chord: m[0], index: m.index }));
 
-    // Se añadió "introduccion" e "introducción" al regex de detección
     const isMarkerLine = (line) => /^(intro(ducci[oó]n)?|solo|interludio|puente|coro|verso|verse|bridge)\b/i.test(line.trim());
 
     const isPureChordLine = (line) => {
@@ -426,7 +518,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (amChords.length === 0 && spChords.length === 0) return false;
 
-        // Se eliminan los multiplicadores tipo "4x" o "x2"
         const leftovers = tempTest.replace(/[\s|:\-\/()[\]{}.,;]/g, '').replace(/\b\d+[xX]\b/gi, '').replace(/^[xX\d]+$/g, '');
         return leftovers.length === 0;
     };
@@ -463,7 +554,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const convertirAWorshipTools = (text) => {
-        // APLICA DICCIONARIO PERSONALIZADO (Copiar/Pegar)
         let processedText = applyCustomDictionary(text);
         
         processedText = convertFromChordPro(processedText);
@@ -638,7 +728,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const cleanWordOcr = (wordText) => {
         let cleaned = wordText.replace(/["”’‘_]/g, '').trim();
         
-        // APLICA DICCIONARIO PERSONALIZADO (OCR)
         cleaned = applyCustomDictionary(cleaned);
         
         cleaned = cleaned.replace(/[^a-zA-Z0-9#b+\-/[\]().,;:|¿?¡!' áéíóúÁÉÍÓÚñÑ]/g, '');
@@ -648,12 +737,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (/^([A-G]|DO|RE|MI|FA|SOL|LA|SI)[b#]?(m|maj|min|sus|dim|aug|add|M|\d)*[.,;:]+$/i.test(cleaned)) {
             cleaned = cleaned.replace(/[.,;:]+$/, '');
         }
-
-        // Vacunas específicas OCR
-        cleaned = cleaned.replace(/\bGa\b/g, 'G');
-        cleaned = cleaned.replace(/\bCa\b/g, 'C');
-        cleaned = cleaned.replace(/\bFG\b/g, 'F G');
-        cleaned = cleaned.replace(/\bCG\b/g, 'C G');
 
         cleaned = cleaned.replace(/\/([A-G])[xX+4ÍiIlL´\`\'’](?:\b|\s|$)/g, '/$1#');
         cleaned = cleaned.replace(/^([A-G])[xX+4ÍiIlL´\`\'’](m|maj|sus|dim|aug|add|\d|\b)/g, '$1#$2');
@@ -871,6 +954,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isAutoConvert && lastInput) { processConversion(false); }
     };
 
+    // --- EVENT LISTENERS ---
     elements.convertButton.addEventListener('click', () => processConversion());
     elements.inputTextbox.addEventListener('input', () => { if (elements.autoConvertToggle.checked) processConversion(false); });
     elements.copyButton.addEventListener('click', () => {
@@ -996,9 +1080,57 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.transposeUpButton.addEventListener('click', () => transposeSong(1));
     elements.transposeDownButton.addEventListener('click', () => transposeSong(-1));
     
+    // --- ATAJOS DE TECLADO ---
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey || e.metaKey) {
+            const key = e.key.toLowerCase();
+            
+            if (key === 'enter') {
+                e.preventDefault();
+                elements.convertButton.click();
+            } else if (key === 'e') {
+                e.preventDefault(); 
+                elements.clearButton.click();
+            } else if (key === 'l') {
+                e.preventDefault(); 
+                elements.loadFileButton.click();
+            } else if (key === 'p') {
+                e.preventDefault(); 
+                elements.exportPdfButton.click();
+            } else if (key === 'z') {
+                if (document.activeElement !== elements.inputTextbox) {
+                    e.preventDefault();
+                    elements.undoButton.click();
+                }
+            } else if (key === 'c') {
+                const selection = window.getSelection().toString();
+                if (!selection) {
+                    e.preventDefault();
+                    elements.copyButton.click();
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                elements.transposeUpButton.click();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                elements.transposeDownButton.click();
+            }
+        }
+    });
+
+    // --- MODALES (AJUSTES Y MANUAL) ---
     elements.settingsButton.addEventListener('click', () => { elements.settingsModal.style.display = 'flex'; });
     elements.closeModalButton.addEventListener('click', () => { elements.settingsModal.style.display = 'none'; });
-    window.addEventListener('click', (e) => { if (e.target == elements.settingsModal) elements.settingsModal.style.display = 'none'; });
+    
+    elements.helpButton.addEventListener('click', () => { elements.helpModal.style.display = 'flex'; });
+    elements.closeHelpButton.addEventListener('click', () => { elements.helpModal.style.display = 'none'; });
+    elements.closeHelpBtnBottom.addEventListener('click', () => { elements.helpModal.style.display = 'none'; });
+    
+    window.addEventListener('click', (e) => { 
+        if (e.target == elements.settingsModal) elements.settingsModal.style.display = 'none'; 
+        if (e.target == elements.helpModal) elements.helpModal.style.display = 'none'; 
+    });
+    
     elements.saveSettingsButton.addEventListener('click', saveSettings);
     elements.resetRegexButton.addEventListener('click', () => {
         elements.chordRegexInput.value = DEFAULT_CHORD_REGEX;
